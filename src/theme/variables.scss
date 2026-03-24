@@ -1,34 +1,47 @@
+// Ionic Variables and Custom App Theme Overrides
+// ----------------------------------------------------------------------------
+
 :root {
-    /** primary **/
-    --ion-color-primary: #6C5CE7;
-    --ion-color-primary-rgb: 108, 92, 231;
-    --ion-color-primary-contrast: #ffffff;
+  /** Primary **/
+  --ion-color-primary: #ff3b30;
+  --ion-color-primary-rgb: 255, 59, 48;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e0342a;
+  --ion-color-primary-tint: #ff4f45;
 
-    /** secondary **/
-    --ion-color-secondary: #00CEC9;
-    --ion-color-secondary-rgb: 0, 206, 201;
-    --ion-color-secondary-contrast: #000000;
+  /** Gradient Secondary for our Buttons **/
+  --app-gradient-secondary: #ff6b22;
 
-    /** success **/
-    --ion-color-success: #00B894;
+  /** Backgrounds **/
+  --app-background: #090a0f;
+  --app-background-gradient-start: #1b2735;
 
-    /** warning **/
-    --ion-color-warning: #FDCB6E;
+  /** Glass & Overlays (Light backgrounds on dark) **/
+  --app-glass-bg: rgba(255, 255, 255, 0.05);
+  --app-glass-bg-alt: rgba(255, 255, 255, 0.03);
+  --app-border-color: rgba(255, 255, 255, 0.1);
+  --app-border-color-alt: rgba(255, 255, 255, 0.05);
 
-    /** danger **/
-    --ion-color-danger: #D63031;
+  /** Shadows / Glows **/
+  --app-glow-primary: rgba(255, 59, 48, 0.4);
+  --app-glow-primary-soft: rgba(255, 59, 48, 0.2);
 
-    /** background **/
-    --ion-background-color: #ffffff;
-    --ion-text-color: #000000;
+  /** Text Colors **/
+  --app-text-main: #ffffff;
+  --app-text-secondary: #a0a0a0;
+  --app-text-tertiary: #8c8c8c;
+
+  /** Status Colors **/
+  --app-color-success: #34c759;
+  --app-color-danger: #ff4961;
 }
 
-/* Dark Mode */
-:root.dark {
-    --ion-background-color: #121212;
-    --ion-text-color: #ffffff;
-
-    --ion-color-primary: #8A7CFF;
-    --ion-toolbar-background: #1f1f1f;
-    --ion-item-background: #1e1e1e;
+// Ensure the default dark preference applies correctly
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Override later if necessary when testing bright vs dark. For now, it matches our premium dark theme natively.
+    --app-background: #090a0f;
+    --app-text-main: #ffffff;
+  }
 }

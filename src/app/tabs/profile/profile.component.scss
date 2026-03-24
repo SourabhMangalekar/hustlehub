@@ -6,7 +6,7 @@
 }
 
 .profile-content {
-  --background: #090a0f;
+  --background: var(--app-background);
   font-family: 'Inter', sans-serif;
 }
 
@@ -16,13 +16,13 @@
   flex-direction: column;
   align-items: center;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--app-border-color-alt);
 }
 
 .cover-photo {
   width: 100%;
   height: 140px;
-  background: linear-gradient(135deg, rgba(255,59,48,0.3) 0%, rgba(25,26,35,1) 100%);
+  background: linear-gradient(135deg, rgba(var(--ion-color-primary-rgb),0.3) 0%, var(--app-background) 100%);
   position: absolute;
   top: 0;
   left: 0;
@@ -38,7 +38,7 @@
 .main-avatar {
   width: 110px;
   height: 110px;
-  border: 4px solid #090a0f;
+  border: 4px solid var(--app-background);
   box-shadow: 0 8px 25px rgba(0,0,0,0.5);
 }
 
@@ -48,13 +48,13 @@
   right: 0;
   width: 35px;
   height: 35px;
-  background: #ff3b30;
+  background: var(--ion-color-primary);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid #090a0f;
-  color: white;
+  border: 3px solid var(--app-background);
+  color: var(--app-text-main);
   
   ion-icon {
     font-size: 16px;
@@ -70,14 +70,14 @@
 .user-name {
   font-size: 1.6rem;
   font-weight: 800;
-  color: white;
+  color: var(--app-text-main);
   margin: 0;
   letter-spacing: 0.5px;
 }
 
 .user-role {
   font-size: 0.95rem;
-  color: #a0a0a0;
+  color: var(--app-text-secondary);
   margin: 5px 0 20px;
 }
 
@@ -85,10 +85,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--app-glass-bg-alt);
   padding: 15px 30px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--app-border-color-alt);
   backdrop-filter: blur(10px);
 }
 
@@ -102,13 +102,13 @@
     margin: 0;
     font-size: 1.2rem;
     font-weight: 800;
-    color: white;
+    color: var(--app-text-main);
   }
   
   p {
     margin: 5px 0 0;
     font-size: 0.75rem;
-    color: #8c8c8c;
+    color: var(--app-text-tertiary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
@@ -118,7 +118,7 @@
 .stat-divider {
   width: 1px;
   height: 30px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--app-border-color);
 }
 
 .settings-container {
@@ -128,7 +128,7 @@
 .section-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: white;
+  color: var(--app-text-main);
   margin: 0 0 15px 5px;
 }
 
@@ -138,12 +138,12 @@
 }
 
 .setting-item {
-  --background: rgba(255, 255, 255, 0.03);
+  --background: var(--app-glass-bg-alt);
   --border-radius: 16px;
   --padding-start: 15px;
   margin-bottom: 12px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--app-border-color-alt);
   
   ion-label {
     font-size: 1rem;
@@ -153,15 +153,15 @@
 }
 
 .logout-btn {
-  --background: rgba(255, 59, 48, 0.1);
-  --color: #ff3b30;
+  --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  --color: var(--ion-color-primary);
   --box-shadow: none;
   --border-radius: 16px;
   margin-top: 25px;
   height: 50px;
   font-weight: 600;
   font-size: 1rem;
-  border: 1px solid rgba(255, 59, 48, 0.2);
+  border: 1px solid var(--app-glow-primary-soft);
 }
 
 .bottom-spacer {

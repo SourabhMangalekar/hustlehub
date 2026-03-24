@@ -1,5 +1,5 @@
 .auth-content {
-  --background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+  --background: radial-gradient(circle at center, var(--app-background-gradient-start) 0%, var(--app-background) 100%);
   font-family: 'Inter', sans-serif;
 }
 
@@ -9,7 +9,7 @@
   justify-content: center;
   min-height: 100%;
   padding: 30px 20px;
-  color: white;
+  color: var(--app-text-main);
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -28,7 +28,7 @@
 
 .auth-subtitle {
   font-size: 0.95rem;
-  color: #a0a0a0;
+  color: var(--app-text-secondary);
   margin-top: 8px;
 }
 
@@ -44,21 +44,21 @@
 }
 
 .custom-input {
-  --background: rgba(255, 255, 255, 0.05);
+  --background: var(--app-glass-bg);
   --border-radius: 16px;
   --padding-start: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--app-border-color);
   border-radius: 16px;
   transition: all 0.3s ease;
 
   &:focus-within {
-    border-color: #ff3b30;
-    box-shadow: 0 0 10px rgba(255, 59, 48, 0.2);
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 10px var(--app-glow-primary-soft);
   }
 
   ion-input {
-    --color: white;
-    --placeholder-color: #8c8c8c;
+    --color: var(--app-text-main);
+    --placeholder-color: var(--app-text-tertiary);
     font-size: 1rem;
   }
 
@@ -68,17 +68,17 @@
 }
 
 .error-msg {
-  color: #ff4961;
+  color: var(--app-color-danger);
   font-size: 0.8rem;
   padding-left: 10px;
   margin-top: 5px;
 }
 
 .auth-btn {
-  --background: linear-gradient(135deg, #ff3b30 0%, #ff6b22 100%);
-  --background-hover: linear-gradient(135deg, #ff6b22 0%, #ff3b30 100%);
+  --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
+  --background-hover: linear-gradient(135deg, var(--app-gradient-secondary) 0%, var(--ion-color-primary) 100%);
   --border-radius: 16px;
-  --box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+  --box-shadow: 0 4px 15px var(--app-glow-primary);
   margin-top: 15px;
   height: 52px;
   font-weight: 600;
@@ -96,10 +96,10 @@
   margin-top: 30px;
   margin-bottom: 20px;
   font-size: 0.95rem;
-  color: #a0a0a0;
+  color: var(--app-text-secondary);
 
   .highlight-link {
-    color: #ff3b30;
+    color: var(--ion-color-primary);
     font-weight: 600;
     text-decoration: none;
     margin-left: 5px;
@@ -115,14 +115,14 @@
   margin-bottom: 5px;
 
   ion-segment {
-    --background: rgba(255, 255, 255, 0.05);
+    --background: var(--app-glass-bg);
     border-radius: 12px;
     padding: 3px;
 
     ion-segment-button {
-      --color: #a0a0a0;
-      --color-checked: white;
-      --background-checked: rgba(255, 59, 48, 0.9);
+      --color: var(--app-text-secondary);
+      --color-checked: var(--app-text-main);
+      --background-checked: rgba(var(--ion-color-primary-rgb), 0.9);
       --indicator-color: transparent;
       border-radius: 10px;
       font-weight: 600;
