@@ -1,9 +1,91 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Home</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <div class="header-content">
+      <div class="user-greeting">
+        <p class="greeting-text">Hello, Hustler 👋</p>
+        <h1 class="header-title">Discover</h1>
+      </div>
+      <ion-avatar class="header-avatar" routerLink="/tabs/profile">
+        <img src="https://i.pravatar.cc/150?img=68" />
+      </ion-avatar>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-button (click)="toggleDark()">Toggle Dark Mode</ion-button>
+<ion-content class="dashboard-content" scroll-y="true">
+  <div class="feed-container">
+    
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <ion-searchbar mode="ios" placeholder="Search for opportunities..." class="custom-searchbar"></ion-searchbar>
+    </div>
+
+    <!-- Category Pills -->
+    <div class="categories-scroll">
+      <div class="category-pill active">All</div>
+      <div class="category-pill">Design</div>
+      <div class="category-pill">Development</div>
+      <div class="category-pill">Marketing</div>
+      <div class="category-pill">Photography</div>
+    </div>
+
+    <h2 class="section-heading">Trending Requirements</h2>
+
+    <div class="cards-list">
+      
+      <!-- Card 1 -->
+      <div class="requirement-card">
+        <div class="card-header">
+          <ion-badge color="tertiary" class="category-badge">Design</ion-badge>
+          <span class="time-posted">2h ago</span>
+        </div>
+        <h3 class="card-title">UI/UX Designer for Mobile App</h3>
+        <p class="card-desc">Looking for an experienced designer to revamp our fin-tech application with modern glassmorphism aesthetic.</p>
+        <div class="card-footer">
+          <div class="budget">
+            <ion-icon name="cash-outline"></ion-icon>
+            <span>$500 - $1000</span>
+          </div>
+          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="requirement-card">
+        <div class="card-header">
+          <ion-badge color="warning" class="category-badge">Development</ion-badge>
+          <span class="time-posted">5h ago</span>
+        </div>
+        <h3 class="card-title">Frontend Developer (Angular/Ionic)</h3>
+        <p class="card-desc">Need a developer to convert our Figma designs into a pixel-perfect Ionic cross-platform application.</p>
+        <div class="card-footer">
+          <div class="budget">
+            <ion-icon name="cash-outline"></ion-icon>
+            <span>$1200 - $2000</span>
+          </div>
+          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="requirement-card">
+        <div class="card-header">
+          <ion-badge color="success" class="category-badge">Marketing</ion-badge>
+          <span class="time-posted">1d ago</span>
+        </div>
+        <h3 class="card-title">Social Media Manager Needed</h3>
+        <p class="card-desc">Manage Instagram and TikTok accounts for a local coffee shop. Content creation and scheduling.</p>
+        <div class="card-footer">
+          <div class="budget">
+            <ion-icon name="cash-outline"></ion-icon>
+            <span>$300/mo</span>
+          </div>
+          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="bottom-spacer"></div>
+  </div>
 </ion-content>
