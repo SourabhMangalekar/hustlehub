@@ -1,0 +1,87 @@
+.splash-content {
+  --background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+}
+
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: white;
+  animation: fadeIn 1s ease-out;
+}
+
+.logo-box {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8.5px);
+  -webkit-backdrop-filter: blur(8.5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: pulseLogo 2.5s infinite ease-in-out;
+}
+
+.brand-icon {
+  font-size: 50px;
+  color: #ff3b30;
+}
+
+.brand-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.highlight {
+  color: #ff3b30;
+}
+
+.brand-subtitle {
+  font-size: 1rem;
+  color: #a0a0a0;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  font-family: 'Inter', sans-serif;
+}
+
+.loader {
+  display: flex;
+  gap: 8px;
+  margin-top: 60px;
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ff3b30;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseLogo {
+  0% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
+  50% { transform: scale(1.05); box-shadow: 0 15px 40px 0 rgba(255, 59, 48, 0.2); }
+  100% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
