@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -6,5 +11,58 @@ import { Component } from '@angular/core';
   styleUrls: ['./post.component.scss']
 })
 export class PostComponent {
+  postForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private db = inject(DatabaseService);
+  public auth = inject(AuthService);
+  private toastController = inject(ToastController);
+  private router = inject(Router);
+  
+  isLoading = false;
 
+  constructor() {
+    this.postForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      budget: ['', Validators.required],
+      city: ['Remote']
+    });
+  }
+
+  async onPost() {
+    if (this.postForm.valid) {
+      this.isLoading = true;
+      try {
+        const user = this.auth.currentUser();
+        if (!user) throw new Error('Must be logged in to post');
+        
+        await this.db.createPost({
+          ...this.postForm.value,
+          createdBy: user.uid
+        });
+
+        const toast = await this.toastController.create({
+          message: 'Collaboration requested successfully!',
+          duration: 2000,
+          color: 'success',
+          position: 'top'
+        });
+        toast.present();
+        
+        this.postForm.reset({ city: 'Remote' });
+        this.router.navigate(['/tabs/home']);
+      } catch (error: any) {
+        // Safe to ignore minor console UI errors if any
+        const toast = await this.toastController.create({
+          message: error.message || 'Failed to create post',
+          duration: 3000,
+          color: 'danger',
+          position: 'top'
+        });
+        toast.present();
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
 }

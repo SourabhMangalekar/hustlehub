@@ -6,17 +6,6 @@
     </div>
 
     <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="auth-form">
-      <div class="role-selector">
-        <ion-segment formControlName="role" mode="ios">
-          <ion-segment-button value="demand">
-            <ion-label>Find Services</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="supply">
-            <ion-label>Offer Services</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-      </div>
-
       <div class="input-group">
         <ion-item lines="none" class="custom-input">
           <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>

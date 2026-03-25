@@ -1,0 +1,114 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.transparent-toolbar {
+  --background: transparent;
+  --border-width: 0;
+}
+
+.header-content {
+  padding: 10px 20px;
+}
+
+.header-title {
+  margin: 5px 0 0 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--app-text-main);
+  letter-spacing: 0.5px;
+}
+
+.post-content {
+  --background: var(--app-background);
+  font-family: 'Inter', sans-serif;
+}
+
+.form-container {
+  padding: 10px 20px;
+}
+
+.form-subtitle {
+  color: var(--app-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-row {
+  display: flex;
+  gap: 15px;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-label {
+  font-size: 0.9rem;
+  color: var(--app-text-main);
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-left: 5px;
+}
+
+.custom-input {
+  --background: var(--app-glass-bg);
+  --border-radius: 12px;
+  --padding-start: 15px;
+  border: 1px solid var(--app-border-color);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 10px var(--app-glow-primary-soft);
+  }
+
+  ion-input, ion-textarea {
+    --color: var(--app-text-main);
+    --placeholder-color: var(--app-text-tertiary);
+    font-size: 1rem;
+  }
+}
+
+.textarea-item {
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.submit-btn {
+  --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
+  --background-hover: linear-gradient(135deg, var(--app-gradient-secondary) 0%, var(--ion-color-primary) 100%);
+  --border-radius: 16px;
+  --box-shadow: 0 4px 15px var(--app-glow-primary);
+  margin-top: 10px;
+  height: 55px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.bottom-spacer {
+  height: 100px;
+}

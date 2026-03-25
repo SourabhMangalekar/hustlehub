@@ -13,6 +13,10 @@
 </ion-header>
 
 <ion-content class="dashboard-content" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div class="feed-container">
     
     <!-- Search Bar -->
@@ -33,52 +37,25 @@
 
     <div class="cards-list">
       
-      <!-- Card 1 -->
-      <div class="requirement-card">
-        <div class="card-header">
-          <ion-badge color="tertiary" class="category-badge">Design</ion-badge>
-          <span class="time-posted">2h ago</span>
-        </div>
-        <h3 class="card-title">UI/UX Designer for Mobile App</h3>
-        <p class="card-desc">Looking for an experienced designer to revamp our fin-tech application with modern glassmorphism aesthetic.</p>
-        <div class="card-footer">
-          <div class="budget">
-            <ion-icon name="cash-outline"></ion-icon>
-            <span>$500 - $1000</span>
-          </div>
-          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
-        </div>
+      <div class="loader-state" *ngIf="isLoading()" style="text-align: center; margin-top: 20px;">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
       </div>
 
-      <!-- Card 2 -->
-      <div class="requirement-card">
-        <div class="card-header">
-          <ion-badge color="warning" class="category-badge">Development</ion-badge>
-          <span class="time-posted">5h ago</span>
-        </div>
-        <h3 class="card-title">Frontend Developer (Angular/Ionic)</h3>
-        <p class="card-desc">Need a developer to convert our Figma designs into a pixel-perfect Ionic cross-platform application.</p>
-        <div class="card-footer">
-          <div class="budget">
-            <ion-icon name="cash-outline"></ion-icon>
-            <span>$1200 - $2000</span>
-          </div>
-          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
-        </div>
+      <div class="empty-state" *ngIf="!isLoading() && posts().length === 0" style="text-align: center; color: var(--app-text-secondary); margin-top: 20px;">
+        <p>No collaborations found yet!</p>
       </div>
 
-      <!-- Card 3 -->
-      <div class="requirement-card">
+      <!-- Dynamic Cards -->
+      <div class="requirement-card" *ngFor="let post of posts()">
         <div class="card-header">
-          <ion-badge color="success" class="category-badge">Marketing</ion-badge>
-          <span class="time-posted">1d ago</span>
+          <ion-badge color="tertiary" class="category-badge">{{ post.city || 'Remote' }}</ion-badge>
         </div>
-        <h3 class="card-title">Social Media Manager Needed</h3>
-        <p class="card-desc">Manage Instagram and TikTok accounts for a local coffee shop. Content creation and scheduling.</p>
+        <h3 class="card-title">{{ post.title }}</h3>
+        <p class="card-desc">{{ post.description }}</p>
         <div class="card-footer">
           <div class="budget">
             <ion-icon name="cash-outline"></ion-icon>
-            <span>$300/mo</span>
+            <span>{{ post.budget }}</span>
           </div>
           <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
         </div>
