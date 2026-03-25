@@ -1,0 +1,330 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.onboarding-content {
+  --background: radial-gradient(circle at top center, var(--app-background-gradient-start) 0%, var(--app-background) 100%);
+  font-family: 'Inter', sans-serif;
+}
+
+.onboarding-container {
+  padding: 40px 24px 60px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: var(--app-text-main);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.onboarding-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-badge {
+  width: 60px;
+  height: 60px;
+  background: var(--app-glass-bg);
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 14px;
+  border: 1px solid var(--app-border-color);
+
+  ion-icon {
+    font-size: 30px;
+    color: var(--ion-color-primary);
+  }
+}
+
+.onboarding-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+  .highlight { color: var(--ion-color-primary); }
+}
+
+.onboarding-subtitle {
+  color: var(--app-text-secondary);
+  font-size: 0.9rem;
+  margin: 6px 0 0;
+}
+
+// Step progress dots
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--app-border-color);
+  transition: background 0.4s ease;
+
+  &.active {
+    background: var(--ion-color-primary);
+  }
+}
+
+.step-line {
+  width: 30px;
+  height: 2px;
+  background: var(--app-border-color);
+  transition: background 0.4s ease;
+
+  &.active {
+    background: var(--ion-color-primary);
+  }
+}
+
+// Step content
+.step-content {
+  flex: 1;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.step-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.step-subtitle {
+  font-size: 0.88rem;
+  color: var(--app-text-secondary);
+  text-align: center;
+  margin: -10px 0 20px;
+}
+
+// Role Cards
+.role-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.role-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-border-color);
+  border-radius: 18px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.98);
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 18px var(--app-glow-primary-soft);
+  }
+}
+
+.role-icon-wrap {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ion-icon { font-size: 22px; }
+
+  &.demand {
+    background: rgba(var(--ion-color-primary-rgb), 0.15);
+    ion-icon { color: var(--ion-color-primary); }
+  }
+
+  &.supply {
+    background: rgba(52, 199, 89, 0.15);
+    ion-icon { color: #34c759; }
+  }
+}
+
+.role-card-text {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--app-text-secondary);
+    line-height: 1.45;
+  }
+}
+
+.card-arrow {
+  color: var(--app-text-tertiary);
+  font-size: 1.1rem;
+}
+
+// Subtype chips
+.chip-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.subtype-chip {
+  padding: 16px 20px;
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-border-color);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--app-text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background: var(--ion-color-primary);
+    border-color: var(--ion-color-primary);
+    transform: scale(0.98);
+  }
+}
+
+// Meta form
+.meta-step {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.meta-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--app-text-main);
+  margin-bottom: 8px;
+  padding-left: 4px;
+
+  .hint {
+    font-weight: 400;
+    color: var(--app-text-tertiary);
+  }
+}
+
+.meta-input {
+  --background: var(--app-glass-bg);
+  --border-radius: 12px;
+  --padding-start: 12px;
+  border: 1px solid var(--app-border-color);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+
+  &:focus-within {
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 8px var(--app-glow-primary-soft);
+  }
+
+  ion-input, ion-textarea {
+    --color: var(--app-text-main);
+    --placeholder-color: var(--app-text-tertiary);
+    font-size: 0.95rem;
+  }
+}
+
+.next-btn {
+  --background: var(--app-glass-bg);
+  --color: var(--app-text-main);
+  --border-radius: 14px;
+  --box-shadow: none;
+  border: 1px solid var(--app-border-color);
+  height: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+// Confirm
+.confirm-step {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.confirm-icon {
+  margin-bottom: 16px;
+  ion-icon {
+    font-size: 80px;
+    color: #34c759;
+  }
+}
+
+.confirm-desc {
+  color: var(--app-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 300px;
+}
+
+.confirm-btn {
+  --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
+  --border-radius: 16px;
+  --box-shadow: 0 4px 15px var(--app-glow-primary);
+  width: 100%;
+  height: 55px;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--app-text-secondary);
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 18px;
+  padding: 0;
+
+  &.center {
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+}
+
+.bottom-spacer { height: 80px; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

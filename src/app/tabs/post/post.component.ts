@@ -35,6 +35,21 @@ export class PostComponent {
       try {
         const user = this.auth.currentUser();
         if (!user) throw new Error('Must be logged in to post');
+
+        // Role gate: unassigned users must complete profile first
+        const profile = await this.db.getUserProfile(user.uid);
+        if (!profile || profile.role === 'unassigned') {
+          const toast = await this.toastController.create({
+            message: '⚡ Complete your profile first to post a requirement!',
+            duration: 3000,
+            color: 'warning',
+            position: 'top'
+          });
+          toast.present();
+          this.router.navigate(['/tabs/onboarding']);
+          this.isLoading = false;
+          return;
+        }
         
         await this.db.createPost({
           ...this.postForm.value,

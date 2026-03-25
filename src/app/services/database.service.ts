@@ -13,20 +13,49 @@ import {
 } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
 
+export type UserRole = 'demand' | 'supply' | 'admin' | 'unassigned';
+export type UserRoleSubtype = 'business' | 'influencer' | 'photographer' | 'freelancer' | 'bride';
+export type UserStatus = 'active' | 'blocked' | 'deleted';
+
+export interface UserMeta {
+  social?: {
+    instagramHandle?: string;
+    followers?: number;
+    youtube?: string;
+  };
+  professional?: {
+    skills?: string[];
+    equipment?: string[];
+    experienceYears?: number;
+  };
+  business?: {
+    companyName?: string;
+  };
+  personal?: {
+    weddingDate?: string;
+  };
+}
+
+export interface UserStats {
+  rating: number;
+  reviewCount: number;
+  completedJobs: number;
+  totalJobs: number;
+}
+
 export interface UserProfile {
   uid: string;
   name: string;
-  email?: string;
   phone?: string;
-  role?: 'demand' | 'supply' | 'admin' | 'unassigned';
-  roleSubtype?: string;
+  email?: string;
+  role: UserRole;
+  roleSubtype?: UserRoleSubtype;
   bio?: string;
   city?: string;
   profileImage?: string;
-  meta?: any;
-  rating?: number;
-  reviewCount?: number;
-  status?: string;
+  meta?: UserMeta;
+  stats: UserStats;
+  status: UserStatus;
   createdAt: number;
   updatedAt: number;
 }
@@ -70,8 +99,12 @@ export class DatabaseService {
       name: data.name || '',
       email: data.email,
       role: data.role || 'unassigned',
-      rating: 0,
-      reviewCount: 0,
+      stats: {
+        rating: 0,
+        reviewCount: 0,
+        completedJobs: 0,
+        totalJobs: 0
+      },
       status: 'active',
       createdAt: now,
       updatedAt: now,

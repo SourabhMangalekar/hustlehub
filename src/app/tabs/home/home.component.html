@@ -45,7 +45,6 @@
         <p>No collaborations found yet!</p>
       </div>
 
-      <!-- Dynamic Cards -->
       <div class="requirement-card" *ngFor="let post of posts()">
         <div class="card-header">
           <ion-badge color="tertiary" class="category-badge">{{ post.city || 'Remote' }}</ion-badge>
@@ -57,7 +56,7 @@
             <ion-icon name="cash-outline"></ion-icon>
             <span>{{ post.budget }}</span>
           </div>
-          <ion-button shape="round" size="small" class="apply-btn">Apply</ion-button>
+          <ion-button shape="round" size="small" class="apply-btn" (click)="applyToPost(post)">Apply</ion-button>
         </div>
       </div>
 
