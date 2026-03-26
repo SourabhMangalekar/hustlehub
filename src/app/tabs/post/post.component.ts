@@ -29,7 +29,7 @@ export class PostComponent {
       title: ['', Validators.required],
       description: ['', Validators.required],
       budget: ['', Validators.required],
-      city: [CITY_CODES.REMOTE]
+      city: [CITY_CODES.PUNE]
     });
   }
 
@@ -68,7 +68,7 @@ export class PostComponent {
         });
         toast.present();
         
-        this.postForm.reset({ city: CITY_CODES.REMOTE });
+        this.postForm.reset({ city: CITY_CODES.PUNE });
         this.router.navigate([APP_ROUTES.HOME]);
       } catch (error: any) {
         // Safe to ignore minor console UI errors if any

@@ -36,9 +36,17 @@
 
         <div class="input-group half-width">
           <ion-label class="custom-label">Location</ion-label>
-          <ion-item lines="none" class="custom-input">
+          <ion-item lines="none" class="custom-input city-select-item">
             <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
-            <ion-input type="text" placeholder="City or Remote" formControlName="city"></ion-input>
+            <ion-select
+              formControlName="city"
+              interface="action-sheet"
+              placeholder="Select city"
+              class="city-select">
+              <ion-select-option *ngFor="let city of CITIES" [value]="city.code">
+                {{ city.label }}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
         </div>
       </div>

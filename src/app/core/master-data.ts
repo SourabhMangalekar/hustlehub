@@ -62,7 +62,6 @@ export type UserRoleSubtype = typeof SUBTYPE_CODES[keyof typeof SUBTYPE_CODES];
 // To add a new city: add one entry here, CITY_CODES updates automatically.
 // ─────────────────────────────────────────────────────────────
 export const CITIES = [
-  { label: 'Remote',     code: 'CITY.REMOTE'     },
   { label: 'Pune',       code: 'CITY.PUNE'       },
   { label: 'Mumbai',     code: 'CITY.MUMBAI'     },
   { label: 'Delhi',      code: 'CITY.DELHI'      },
@@ -113,3 +112,51 @@ export const APP_ROUTES = {
 // APP IDENTITY
 // ─────────────────────────────────────────────────────────────
 export const APP_CONTEXT = 'HUSTLEHUB';
+
+// ─────────────────────────────────────────────────────────────
+// LABEL LOOKUP HELPERS
+// Use these in templates instead of displaying raw code values.
+// ─────────────────────────────────────────────────────────────
+
+/** Maps a city code → human label. e.g. 'CITY.MUMBAI' → 'Mumbai' */
+export function getLabelForCity(code: string | undefined, fallback = 'Remote'): string {
+  if (!code) return fallback;
+  return CITIES.find(c => c.code === code)?.label ?? code;
+}
+
+/** Maps a role code → human label. e.g. 'ROLE.DEMAND' → 'Find Talent' */
+export function getLabelForRole(code: string | undefined, fallback = '—'): string {
+  if (!code) return fallback;
+  const systemLabels: Record<string, string> = {
+    [ROLE_CODES.ADMIN]:      'Admin',
+    [ROLE_CODES.UNASSIGNED]: 'Unassigned'
+  };
+  return systemLabels[code] ?? ROLES.find(r => r.code === code)?.label ?? code;
+}
+
+/** Maps a subtype code → human label. e.g. 'ROLE_SUB.INFLUENCER' → '📸 Influencer' */
+export function getLabelForSubtype(code: string | undefined, fallback = '—'): string {
+  if (!code) return fallback;
+  return ROLE_SUBTYPES.find(s => s.code === code)?.label ?? code;
+}
+
+/** Maps a user status code → human label. e.g. 'USER_STATUS.ACTIVE' → 'Active' */
+export function getLabelForUserStatus(code: string | undefined, fallback = '—'): string {
+  const map: Record<string, string> = {
+    [USER_STATUS_CODES.ACTIVE]:  'Active',
+    [USER_STATUS_CODES.BLOCKED]: 'Blocked',
+    [USER_STATUS_CODES.DELETED]: 'Deleted'
+  };
+  return code ? (map[code] ?? code) : fallback;
+}
+
+/** Maps a post status code → human label. e.g. 'POST_STATUS.OPEN' → 'Open' */
+export function getLabelForPostStatus(code: string | undefined, fallback = '—'): string {
+  const map: Record<string, string> = {
+    [POST_STATUS_CODES.OPEN]:        'Open',
+    [POST_STATUS_CODES.CLOSED]:      'Closed',
+    [POST_STATUS_CODES.IN_PROGRESS]: 'In Progress'
+  };
+  return code ? (map[code] ?? code) : fallback;
+}
+

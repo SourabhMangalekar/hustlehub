@@ -3,7 +3,7 @@ import { DatabaseService, Post } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { ROLE_CODES, APP_ROUTES } from '../../core/master-data';
+import { ROLE_CODES, APP_ROUTES, CITIES, getLabelForCity, getLabelForRole, getLabelForSubtype, getLabelForPostStatus } from '../../core/master-data';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +18,12 @@ export class HomeComponent implements OnInit {
   
   public posts = signal<Post[]>([]);
   public isLoading = signal<boolean>(true);
+
+  // Expose label helpers to template
+  readonly getLabelForCity    = getLabelForCity;
+  readonly getLabelForRole    = getLabelForRole;
+  readonly getLabelForSubtype = getLabelForSubtype;
+  readonly getLabelForPostStatus = getLabelForPostStatus;
 
   async ngOnInit() {
     await this.loadPosts();

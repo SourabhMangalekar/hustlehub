@@ -84,6 +84,34 @@
     --placeholder-color: var(--app-text-tertiary);
     font-size: 1rem;
   }
+
+  &.city-select-item {
+    ion-select.city-select {
+      --color: var(--app-text-main);
+      --placeholder-color: var(--app-text-tertiary);
+      color: var(--app-text-main);
+      font-size: 1rem;
+      width: 100%;
+      max-width: 100%;
+
+      // Force the selected value text to be visible
+      &::part(text) {
+        color: var(--app-text-main);
+      }
+
+      // Placeholder text
+      &::part(placeholder) {
+        color: var(--app-text-tertiary);
+        opacity: 1;
+      }
+
+      // Dropdown chevron icon
+      &::part(icon) {
+        color: var(--app-text-secondary);
+        opacity: 0.8;
+      }
+    }
+  }
 }
 
 .textarea-item {

@@ -47,7 +47,7 @@
 
       <div class="requirement-card" *ngFor="let post of posts()">
         <div class="card-header">
-          <ion-badge color="tertiary" class="category-badge">{{ post.city || 'Remote' }}</ion-badge>
+          <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post.city) }}</ion-badge>
         </div>
         <h3 class="card-title">{{ post.title }}</h3>
         <p class="card-desc">{{ post.description }}</p>
