@@ -1,0 +1,115 @@
+// =============================================================
+// HUSTLEHUB — Master Data & Constants
+// Single source of truth for all app constants.
+// When storing in Firestore, always use the `code` value (not `label`).
+//
+// HOW TO ADD A NEW CITY / ROLE / SUBTYPE:
+//   Only edit the array (e.g. CITIES). The corresponding codes object
+//   (e.g. CITY_CODES) is auto-derived — no need to touch it.
+// =============================================================
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — derives a { KEY: 'PREFIX.KEY' } codes object from any
+// array of { code: 'PREFIX.KEY' } items.
+// ─────────────────────────────────────────────────────────────
+type CodesFromArray<T extends readonly { code: string }[]> = {
+  [Item in T[number] as Item['code'] extends `${string}.${infer K}` ? K : never]: Item['code']
+};
+
+function deriveCodesFromArray<T extends readonly { code: string }[]>(items: T): CodesFromArray<T> {
+  return Object.fromEntries(
+    items.map(item => [item.code.split('.').pop()!, item.code])
+  ) as CodesFromArray<T>;
+}
+
+// ─────────────────────────────────────────────────────────────
+// ROLES
+// ─────────────────────────────────────────────────────────────
+export const ROLES = [
+  { label: 'Find Talent',    code: 'ROLE.DEMAND' },
+  { label: 'Offer Services', code: 'ROLE.SUPPLY' }
+] as const;
+
+// ADMIN and UNASSIGNED are system-only roles (not shown in UI)
+const _ROLE_CODES_DERIVED = deriveCodesFromArray(ROLES);
+export const ROLE_CODES = {
+  ..._ROLE_CODES_DERIVED,
+  ADMIN:      'ROLE.ADMIN'      as const,
+  UNASSIGNED: 'ROLE.UNASSIGNED' as const
+};
+
+export type UserRole = typeof ROLE_CODES[keyof typeof ROLE_CODES];
+
+// ─────────────────────────────────────────────────────────────
+// ROLE SUBTYPES
+// To add a new subtype: add one entry here, SUBTYPE_CODES updates automatically.
+// ─────────────────────────────────────────────────────────────
+export const ROLE_SUBTYPES = [
+  // Demand
+  { label: '🏢 Business / Brand', code: 'ROLE_SUB.BUSINESS',     role: 'ROLE.DEMAND' as const },
+  { label: '💍 Bride (Wedding)',   code: 'ROLE_SUB.BRIDE',        role: 'ROLE.DEMAND' as const },
+  // Supply
+  { label: '📸 Influencer',        code: 'ROLE_SUB.INFLUENCER',   role: 'ROLE.SUPPLY' as const },
+  { label: '📷 Photographer',      code: 'ROLE_SUB.PHOTOGRAPHER', role: 'ROLE.SUPPLY' as const },
+  { label: '💻 Freelancer',        code: 'ROLE_SUB.FREELANCER',   role: 'ROLE.SUPPLY' as const }
+] as const;
+
+export const SUBTYPE_CODES = deriveCodesFromArray(ROLE_SUBTYPES);
+export type UserRoleSubtype = typeof SUBTYPE_CODES[keyof typeof SUBTYPE_CODES];
+
+// ─────────────────────────────────────────────────────────────
+// CITIES
+// To add a new city: add one entry here, CITY_CODES updates automatically.
+// ─────────────────────────────────────────────────────────────
+export const CITIES = [
+  { label: 'Remote',     code: 'CITY.REMOTE'     },
+  { label: 'Pune',       code: 'CITY.PUNE'       },
+  { label: 'Mumbai',     code: 'CITY.MUMBAI'     },
+  { label: 'Delhi',      code: 'CITY.DELHI'      },
+  { label: 'Bangalore',  code: 'CITY.BANGALORE'  }
+] as const;
+
+export const CITY_CODES = deriveCodesFromArray(CITIES);
+export type UserCity = typeof CITY_CODES[keyof typeof CITY_CODES];
+
+// ─────────────────────────────────────────────────────────────
+// USER STATUS
+// ─────────────────────────────────────────────────────────────
+export const USER_STATUS_CODES = {
+  ACTIVE:  'USER_STATUS.ACTIVE',
+  BLOCKED: 'USER_STATUS.BLOCKED',
+  DELETED: 'USER_STATUS.DELETED'
+} as const;
+
+export type UserStatus = typeof USER_STATUS_CODES[keyof typeof USER_STATUS_CODES];
+
+// ─────────────────────────────────────────────────────────────
+// POST STATUS
+// ─────────────────────────────────────────────────────────────
+export const POST_STATUS_CODES = {
+  OPEN:        'POST_STATUS.OPEN',
+  CLOSED:      'POST_STATUS.CLOSED',
+  IN_PROGRESS: 'POST_STATUS.IN_PROGRESS'
+} as const;
+
+export type PostStatus = typeof POST_STATUS_CODES[keyof typeof POST_STATUS_CODES];
+
+// ─────────────────────────────────────────────────────────────
+// ROUTES
+// ─────────────────────────────────────────────────────────────
+export const APP_ROUTES = {
+  SPLASH:       '/splash',
+  LOGIN:        '/login',
+  SIGNUP:       '/signup',
+  ONBOARDING:   '/tabs/onboarding',
+  HOME:         '/tabs/home',
+  POST:         '/tabs/post',
+  PROFILE:      '/tabs/profile',
+  CHAT:         '/tabs/chat',
+  APPLICATIONS: '/tabs/applications'
+} as const;
+
+// ─────────────────────────────────────────────────────────────
+// APP IDENTITY
+// ─────────────────────────────────────────────────────────────
+export const APP_CONTEXT = 'HUSTLEHUB';

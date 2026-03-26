@@ -3,6 +3,7 @@ import { DatabaseService, Post } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { ROLE_CODES, APP_ROUTES } from '../../core/master-data';
 
 @Component({
   selector: 'app-home',
@@ -37,11 +38,11 @@ export class HomeComponent implements OnInit {
   async applyToPost(post: Post) {
     const user = this.auth.currentUser();
     if (!user) {
-      this.router.navigate(['/login']);
+      this.router.navigate([APP_ROUTES.LOGIN]);
       return;
     }
     const profile = await this.db.getUserProfile(user.uid);
-    if (!profile || profile.role === 'unassigned') {
+    if (!profile || profile.role === ROLE_CODES.UNASSIGNED) {
       const toast = await this.toastController.create({
         message: '⚡ Complete your profile first to apply!',
         duration: 3000,
@@ -49,7 +50,7 @@ export class HomeComponent implements OnInit {
         position: 'top'
       });
       toast.present();
-      this.router.navigate(['/tabs/onboarding']);
+      this.router.navigate([APP_ROUTES.ONBOARDING]);
       return;
     }
     // TODO: open application modal / navigate to application flow

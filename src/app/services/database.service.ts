@@ -12,10 +12,19 @@ import {
   updateDoc
 } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
+import {
+  APP_CONTEXT,
+  UserRole,
+  UserRoleSubtype,
+  UserStatus,
+  PostStatus,
+  ROLE_CODES,
+  POST_STATUS_CODES,
+  USER_STATUS_CODES
+} from '../core/master-data';
 
-export type UserRole = 'demand' | 'supply' | 'admin' | 'unassigned';
-export type UserRoleSubtype = 'business' | 'influencer' | 'photographer' | 'freelancer' | 'bride';
-export type UserStatus = 'active' | 'blocked' | 'deleted';
+// Re-export types so existing imports from this service still work
+export type { UserRole, UserRoleSubtype, UserStatus, PostStatus };
 
 export interface UserMeta {
   social?: {
@@ -68,7 +77,7 @@ export interface Post {
   city?: string;
   createdBy: string;
   roleSubtypeRequired?: string;
-  status: 'open' | 'closed' | 'in_progress';
+  status: PostStatus;
   meta?: any;
   createdAt: number;
   updatedAt: number;
@@ -79,7 +88,7 @@ export interface Post {
 })
 export class DatabaseService {
   private db = getFirestore(getApp());
-  public readonly APP_CONTEXT = 'HUSTLEHUB';
+  public readonly APP_CONTEXT = APP_CONTEXT;
 
   constructor() {}
 
@@ -98,14 +107,14 @@ export class DatabaseService {
       uid,
       name: data.name || '',
       email: data.email,
-      role: data.role || 'unassigned',
+      role: data.role || ROLE_CODES.UNASSIGNED,
       stats: {
         rating: 0,
         reviewCount: 0,
         completedJobs: 0,
         totalJobs: 0
       },
-      status: 'active',
+      status: USER_STATUS_CODES.ACTIVE,
       createdAt: now,
       updatedAt: now,
       ...data
@@ -135,7 +144,7 @@ export class DatabaseService {
     const now = Date.now();
     const newPost: Partial<Post> = {
       ...postData,
-      status: postData.status || 'open',
+      status: postData.status || POST_STATUS_CODES.OPEN,
       createdAt: now,
       updatedAt: now
     };
@@ -144,7 +153,7 @@ export class DatabaseService {
 
   async getRecentPosts(): Promise<Post[]> {
     const postsRef = collection(this.db, this.getTenantPath('posts'));
-    const q = query(postsRef, where('status', '==', 'open'));
+    const q = query(postsRef, where('status', '==', POST_STATUS_CODES.OPEN));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Post));
   }

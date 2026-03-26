@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth';
 import { getApp } from 'firebase/app';
 import { DatabaseService } from './database.service';
+import { ROLE_CODES } from '../core/master-data';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class AuthService {
     await this.dbService.createUserProfile(user.uid, {
       name: fullName,
       email: email,
-      role: 'unassigned'
+      role: ROLE_CODES.UNASSIGNED
     });
 
     return userCredential;

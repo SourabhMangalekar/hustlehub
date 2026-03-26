@@ -28,18 +28,18 @@
       <h2 class="step-title">What are you here for?</h2>
 
       <div class="role-cards">
-        <div class="role-card" (click)="selectRole('demand')">
+        <div class="role-card" (click)="selectRole(ROLE_CODES.DEMAND)">
           <div class="role-icon-wrap demand">
             <ion-icon name="search-outline"></ion-icon>
           </div>
           <div class="role-card-text">
             <h3>Find Talent</h3>
-            <p>I'm a Business or Brand looking to collaborate with influencers & creators</p>
+            <p>I'm a Business or Brand looking to collaborate with influencers &amp; creators</p>
           </div>
           <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
         </div>
 
-        <div class="role-card" (click)="selectRole('supply')">
+        <div class="role-card" (click)="selectRole(ROLE_CODES.SUPPLY)">
           <div class="role-icon-wrap supply">
             <ion-icon name="star-outline"></ion-icon>
           </div>
@@ -84,7 +84,11 @@
           <ion-label class="meta-label">Your City</ion-label>
           <ion-item lines="none" class="meta-input">
             <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
-            <ion-input placeholder="e.g. Mumbai" [(ngModel)]="meta.city"></ion-input>
+            <ion-select placeholder="Select city" [(ngModel)]="meta.city" interface="action-sheet">
+              <ion-select-option *ngFor="let city of CITIES" [value]="city.code">
+                {{ city.label }}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
         </div>
 
@@ -96,7 +100,7 @@
         </div>
 
         <!-- Business fields -->
-        <ng-container *ngIf="selectedSubtype === 'business'">
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.BUSINESS">
           <div class="meta-group">
             <ion-label class="meta-label">Company Name</ion-label>
             <ion-item lines="none" class="meta-input">
@@ -107,7 +111,7 @@
         </ng-container>
 
         <!-- Bride fields -->
-        <ng-container *ngIf="selectedSubtype === 'bride'">
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.BRIDE">
           <div class="meta-group">
             <ion-label class="meta-label">Wedding Date</ion-label>
             <ion-item lines="none" class="meta-input">
@@ -118,7 +122,7 @@
         </ng-container>
 
         <!-- Influencer fields -->
-        <ng-container *ngIf="selectedSubtype === 'influencer'">
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.INFLUENCER">
           <div class="meta-group">
             <ion-label class="meta-label">Instagram Handle</ion-label>
             <ion-item lines="none" class="meta-input">
@@ -143,7 +147,7 @@
         </ng-container>
 
         <!-- Photographer & Freelancer fields -->
-        <ng-container *ngIf="selectedSubtype === 'photographer' || selectedSubtype === 'freelancer'">
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.PHOTOGRAPHER || selectedSubtype === SUBTYPE_CODES.FREELANCER">
           <div class="meta-group">
             <ion-label class="meta-label">Years of Experience</ion-label>
             <ion-item lines="none" class="meta-input">
@@ -157,7 +161,7 @@
               <ion-input placeholder="e.g. Portrait, Events, Editing" [(ngModel)]="meta.skills"></ion-input>
             </ion-item>
           </div>
-          <div class="meta-group" *ngIf="selectedSubtype === 'photographer'">
+          <div class="meta-group" *ngIf="selectedSubtype === SUBTYPE_CODES.PHOTOGRAPHER">
             <ion-label class="meta-label">Equipment <span class="hint">(comma separated)</span></ion-label>
             <ion-item lines="none" class="meta-input">
               <ion-input placeholder="e.g. Canon 5D, DJI Drone" [(ngModel)]="meta.equipment"></ion-input>
@@ -181,7 +185,7 @@
       </div>
       <h2 class="step-title">You're all set!</h2>
       <p class="confirm-desc">
-        <strong>{{ selectedSubtype | titlecase }}</strong> profile saved.<br>
+        <strong>{{ selectedSubtypeLabel }}</strong> profile saved.<br>
         You can update your details anytime from your Profile.
       </p>
       <ion-button expand="block" class="confirm-btn" [disabled]="isSaving" (click)="finishOnboarding()">
