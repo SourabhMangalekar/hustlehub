@@ -42,7 +42,7 @@ export class PostComponent {
 
         // Role gate: unassigned users must complete profile first
         const profile = await this.db.getUserProfile(user.uid);
-        if (!profile || profile.role === ROLE_CODES.UNASSIGNED) {
+        if (!profile || profile.system?.role === ROLE_CODES.UNASSIGNED || !profile.system?.role) {
           const toast = await this.toastController.create({
             message: '⚡ Complete your profile first to post a requirement!',
             duration: 3000,
@@ -56,7 +56,10 @@ export class PostComponent {
         }
         
         await this.db.createPost({
-          ...this.postForm.value,
+          title: this.postForm.value.title,
+          description: this.postForm.value.description,
+          budget: this.postForm.value.budget,
+          city: this.postForm.value.city,
           createdBy: user.uid
         });
 

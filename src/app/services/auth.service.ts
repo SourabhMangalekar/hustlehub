@@ -32,8 +32,7 @@ export class AuthService {
     
     await this.dbService.createUserProfile(user.uid, {
       name: fullName,
-      email: email,
-      role: ROLE_CODES.UNASSIGNED
+      email: email
     });
 
     return userCredential;

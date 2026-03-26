@@ -58,8 +58,8 @@ export class OnboardingComponent {
       .map(s => ({ value: s.code as UserRoleSubtype, label: s.label }));
   }
 
-  get needsMetaStep(): boolean {
-    return this.selectedSubtype !== null;
+  get selectedSubtypeLabel(): string {
+    return ROLE_SUBTYPES.find(s => s.code === this.selectedSubtype)?.label ?? '';
   }
 
   selectRole(role: UserRole) {
@@ -81,10 +81,6 @@ export class OnboardingComponent {
     this.step = 4;
   }
 
-  get selectedSubtypeLabel(): string {
-    return ROLE_SUBTYPES.find(s => s.code === this.selectedSubtype)?.label ?? '';
-  }
-
   async finishOnboarding() {
     if (!this.selectedRole || !this.selectedSubtype) return;
     this.isSaving = true;
@@ -93,40 +89,43 @@ export class OnboardingComponent {
       const user = this.auth.currentUser();
       if (!user) return;
 
-      // Build the meta object – only include what user filled in
-      const metaPayload: any = {};
+      // Build V2 meta object — only include filled fields
+      const metaUpdate: any = {};
 
       if (this.selectedSubtype === SUBTYPE_CODES.BUSINESS && this.meta.companyName) {
-        metaPayload.business = { companyName: this.meta.companyName };
+        metaUpdate['meta.business'] = { companyName: this.meta.companyName };
       }
       if (this.selectedSubtype === SUBTYPE_CODES.BRIDE && this.meta.weddingDate) {
-        metaPayload.personal = { weddingDate: this.meta.weddingDate };
+        metaUpdate['meta.personal'] = { weddingDate: this.meta.weddingDate };
       }
       if (this.selectedSubtype === SUBTYPE_CODES.INFLUENCER) {
         const social: any = {};
         if (this.meta.instagramHandle) social.instagramHandle = this.meta.instagramHandle;
-        if (this.meta.followers) social.followers = this.meta.followers;
-        if (this.meta.youtube) social.youtube = this.meta.youtube;
-        if (Object.keys(social).length) metaPayload.social = social;
+        if (this.meta.followers)       social.followers = this.meta.followers;
+        if (this.meta.youtube)         social.youtube = this.meta.youtube;
+        if (Object.keys(social).length) metaUpdate['meta.social'] = social;
       }
       if ([SUBTYPE_CODES.PHOTOGRAPHER, SUBTYPE_CODES.FREELANCER].includes(this.selectedSubtype as any)) {
         const prof: any = {};
         if (this.meta.experienceYears) prof.experienceYears = this.meta.experienceYears;
-        if (this.meta.skills) prof.skills = this.meta.skills.split(',').map(s => s.trim()).filter(Boolean);
-        if (this.meta.equipment) prof.equipment = this.meta.equipment.split(',').map(s => s.trim()).filter(Boolean);
-        if (Object.keys(prof).length) metaPayload.professional = prof;
+        if (this.meta.skills)          prof.skills = this.meta.skills.split(',').map(s => s.trim()).filter(Boolean);
+        if (this.meta.equipment)       prof.equipment = this.meta.equipment.split(',').map(s => s.trim()).filter(Boolean);
+        if (Object.keys(prof).length)  metaUpdate['meta.professional'] = prof;
       }
 
+      // Build V2 nested update payload using dot-notation for partial updates
       const updatePayload: any = {
-        role: this.selectedRole,
-        roleSubtype: this.selectedSubtype
+        'system.role':        this.selectedRole,
+        'system.roleSubtype': this.selectedSubtype,
+        ...metaUpdate
       };
-      if (this.meta.city) updatePayload.city = this.meta.city;
-      if (this.meta.bio) updatePayload.bio = this.meta.bio;
-      if (Object.keys(metaPayload).length) updatePayload.meta = metaPayload;
+
+      if (this.meta.city) updatePayload['profile.city'] = this.meta.city;
+      if (this.meta.bio)  updatePayload['profile.bio']  = this.meta.bio;
 
       await this.db.updateUserProfile(user.uid, updatePayload);
       await this.router.navigate([APP_ROUTES.HOME], { replaceUrl: true });
+
     } catch (e) {
       console.error(e);
     } finally {

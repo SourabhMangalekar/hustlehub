@@ -47,14 +47,14 @@
 
       <div class="requirement-card" *ngFor="let post of posts()">
         <div class="card-header">
-          <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post.city) }}</ion-badge>
+          <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post.profile.city) }}</ion-badge>
         </div>
-        <h3 class="card-title">{{ post.title }}</h3>
-        <p class="card-desc">{{ post.description }}</p>
+        <h3 class="card-title">{{ post.profile.title }}</h3>
+        <p class="card-desc">{{ post.profile.description }}</p>
         <div class="card-footer">
           <div class="budget">
             <ion-icon name="cash-outline"></ion-icon>
-            <span>{{ post.budget }}</span>
+            <span>{{ post.profile.budget }}</span>
           </div>
           <ion-button shape="round" size="small" class="apply-btn" (click)="applyToPost(post)">Apply</ion-button>
         </div>

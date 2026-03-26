@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
       return;
     }
     const profile = await this.db.getUserProfile(user.uid);
-    if (!profile || profile.role === ROLE_CODES.UNASSIGNED) {
+    if (!profile || profile.system?.role === ROLE_CODES.UNASSIGNED || !profile.system?.role) {
       const toast = await this.toastController.create({
         message: '⚡ Complete your profile first to apply!',
         duration: 3000,
