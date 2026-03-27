@@ -8,7 +8,8 @@ import {
   APP_ROUTES,
   getLabelForCity,
   getLabelForPostStatus,
-  getLabelForSubtype
+  getLabelForSubtype,
+  POST_STATUS_CODES
 } from '../../core/master-data';
 
 @Component({
@@ -38,6 +39,7 @@ export class PostDetailComponent implements OnInit {
   readonly getLabelForPostStatus = getLabelForPostStatus;
   readonly getLabelForSubtype    = getLabelForSubtype;
   readonly ROLE_CODES            = ROLE_CODES;
+  readonly POST_STATUS_CODES     = POST_STATUS_CODES;
 
   async ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('id');
@@ -62,7 +64,7 @@ export class PostDetailComponent implements OnInit {
       if (user) {
         this.currentUserId.set(user.uid);
         const profile = await this.db.getUserProfile(user.uid);
-        const role = profile?.system?.role ?? null;
+        const role = profile?.system?.role || (profile as any)?.role || null;
         this.currentUserRole.set(role);
 
         // If supply user, check if already applied
@@ -81,7 +83,14 @@ export class PostDetailComponent implements OnInit {
   isPostOwner(): boolean {
     const p = this.post();
     if (!p) return false;
-    return p.system.createdBy === this.currentUserId();
+    const ownerId = p.system?.createdBy || (p.profile as any)?.userId;
+    return ownerId === this.currentUserId();
+  }
+
+  getPostStatus(): string {
+    const p = this.post();
+    if (!p) return '';
+    return p.system?.status || (p as any).status || this.POST_STATUS_CODES.OPEN;
   }
 
   async viewApplications() {

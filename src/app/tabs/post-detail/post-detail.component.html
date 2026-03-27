@@ -19,8 +19,8 @@
     <div class="detail-card main-card">
       <div class="card-badges">
         <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post()?.profile?.city) }}</ion-badge>
-        <ion-badge [color]="post()?.system?.status === 'POST_STATUS.OPEN' ? 'success' : 'medium'" class="status-badge">
-          {{ getLabelForPostStatus(post()?.system?.status) }}
+        <ion-badge [color]="getPostStatus() === POST_STATUS_CODES.OPEN ? 'success' : 'medium'" class="status-badge">
+          {{ getLabelForPostStatus(getPostStatus()) }}
         </ion-badge>
       </div>
 
@@ -65,61 +65,50 @@
       <p class="description-text">{{ post()?.meta?.deliverables }}</p>
     </div>
 
-    <!-- Empty Spacer -->
+    <!-- Bottom Spacer so content scrolls fully above sticky footer -->
     <div class="bottom-spacer"></div>
   </div>
+
+  <!-- STICKY ACTION FOOTER (Internal to ion-content so tabs don't overlap) -->
+  <div class="sticky-action-footer" *ngIf="!isLoading() && post()">
+    <!-- POST OWNER CONTROLS -->
+    <ng-container *ngIf="isPostOwner()">
+      <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN"
+                  (click)="viewApplications()">
+        View Applications ({{ post()?.stats?.applicationCount }})
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="success" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.IN_PROGRESS"
+                  (click)="markAsCompleted()">
+        Mark as Completed
+      </ion-button>
+      
+      <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.COMPLETED">
+        Completed
+      </ion-button>
+    </ng-container>
+
+    <!-- SUPPLY USER CONTROLS -->
+    <ng-container *ngIf="!isPostOwner() && (currentUserRole() === ROLE_CODES.SUPPLY || currentUserRole() === ROLE_CODES.UNASSIGNED)">
+      <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN && !hasApplied()"
+                  (click)="applyForJob()">
+        Apply Now
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="success" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN && hasApplied()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Applied
+      </ion-button>
+      
+      <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.IN_PROGRESS">
+        In Progress
+      </ion-button>
+    </ng-container>
+  </div>
 </ion-content>
-
-<!-- Fixed Footer for Actions -->
-<ion-footer class="ion-no-border action-footer" *ngIf="!isLoading() && post()">
-  <ion-toolbar class="transparent-toolbar" mode="ios">
-    <div class="footer-content">
-
-      <!-- ============================== -->
-      <!-- POST OWNER CONTROLS            -->
-      <!-- ============================== -->
-      <ng-container *ngIf="isPostOwner()">
-        <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
-                    *ngIf="post()?.system?.status === 'POST_STATUS.OPEN'"
-                    (click)="viewApplications()">
-          View Applications ({{ post()?.stats?.applicationCount }})
-        </ion-button>
-
-        <ion-button expand="block" shape="round" color="success" class="main-action-btn"
-                    *ngIf="post()?.system?.status === 'POST_STATUS.IN_PROGRESS'"
-                    (click)="markAsCompleted()">
-          Mark as Completed
-        </ion-button>
-        
-        <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
-                    *ngIf="post()?.system?.status === 'POST_STATUS.COMPLETED'">
-          Completed
-        </ion-button>
-      </ng-container>
-
-      <!-- ============================== -->
-      <!-- SUPPLY USER CONTROLS           -->
-      <!-- ============================== -->
-      <ng-container *ngIf="!isPostOwner() && (currentUserRole() === ROLE_CODES.SUPPLY || currentUserRole() === ROLE_CODES.UNASSIGNED)">
-        <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
-                    *ngIf="post()?.system?.status === 'POST_STATUS.OPEN' && !hasApplied()"
-                    (click)="applyForJob()">
-          Apply Now
-        </ion-button>
-
-        <ion-button expand="block" shape="round" color="success" class="main-action-btn" disabled
-                    *ngIf="post()?.system?.status === 'POST_STATUS.OPEN' && hasApplied()">
-          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-          Applied
-        </ion-button>
-        
-        <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
-                    *ngIf="post()?.system?.status === 'POST_STATUS.IN_PROGRESS'">
-          In Progress
-        </ion-button>
-      </ng-container>
-
-      <!-- Other demand users see nothing or disabled -->
-    </div>
-  </ion-toolbar>
-</ion-footer>

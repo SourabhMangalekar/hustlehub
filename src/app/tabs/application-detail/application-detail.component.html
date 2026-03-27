@@ -65,47 +65,38 @@
       <p class="description-text">{{ application()?.profile?.message }}</p>
     </div>
 
+    <!-- Bottom Spacer -->
     <div class="bottom-spacer"></div>
   </div>
+
+  <!-- STICKY ACTION FOOTER -->
+  <div class="sticky-action-footer" *ngIf="!isLoading() && application()">
+    <!-- POST OWNER CONTROLS -->
+    <ng-container *ngIf="isPostOwnerView">
+      <div class="action-row" *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING">
+        <ion-button expand="block" shape="round" fill="outline" color="danger" class="half-btn"
+                    (click)="setApplicationStatus(APPLICATION_STATUS_CODES.REJECTED)">
+          Reject
+        </ion-button>
+        <ion-button expand="block" shape="round" color="success" class="half-btn"
+                    (click)="setApplicationStatus(APPLICATION_STATUS_CODES.ACCEPTED)">
+          Accept
+        </ion-button>
+      </div>
+
+      <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                  *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED" disabled>
+        Accepted ✓
+      </ion-button>
+    </ng-container>
+
+    <!-- APPLICANT CONTROLS -->
+    <ng-container *ngIf="isApplicantView">
+      <ion-button expand="block" shape="round" color="danger" fill="outline" class="main-action-btn"
+                  *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING"
+                  (click)="confirmWithdraw()">
+        Withdraw Application
+      </ion-button>
+    </ng-container>
+  </div>
 </ion-content>
-
-<!-- Fixed Footer for Actions -->
-<ion-footer class="ion-no-border action-footer" *ngIf="!isLoading() && application()">
-  <ion-toolbar class="transparent-toolbar" mode="ios">
-    <div class="footer-content">
-
-      <!-- ============================== -->
-      <!-- POST OWNER CONTROLS            -->
-      <!-- ============================== -->
-      <ng-container *ngIf="isPostOwnerView">
-        <div class="action-row" *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING">
-          <ion-button expand="block" shape="round" fill="outline" color="danger" class="half-btn"
-                      (click)="setApplicationStatus(APPLICATION_STATUS_CODES.REJECTED)">
-            Reject
-          </ion-button>
-          <ion-button expand="block" shape="round" color="success" class="half-btn"
-                      (click)="setApplicationStatus(APPLICATION_STATUS_CODES.ACCEPTED)">
-            Accept
-          </ion-button>
-        </div>
-
-        <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
-                    *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED" disabled>
-          Accepted ✓
-        </ion-button>
-      </ng-container>
-
-      <!-- ============================== -->
-      <!-- APPLICANT CONTROLS             -->
-      <!-- ============================== -->
-      <ng-container *ngIf="isApplicantView">
-        <ion-button expand="block" shape="round" color="danger" fill="outline" class="main-action-btn"
-                    *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING"
-                    (click)="confirmWithdraw()">
-          Withdraw Application
-        </ion-button>
-      </ng-container>
-
-    </div>
-  </ion-toolbar>
-</ion-footer>
