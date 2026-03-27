@@ -88,24 +88,50 @@ export type UserStatus = typeof USER_STATUS_CODES[keyof typeof USER_STATUS_CODES
 export const POST_STATUS_CODES = {
   OPEN:        'POST_STATUS.OPEN',
   CLOSED:      'POST_STATUS.CLOSED',
-  IN_PROGRESS: 'POST_STATUS.IN_PROGRESS'
+  IN_PROGRESS: 'POST_STATUS.IN_PROGRESS',
+  COMPLETED:   'POST_STATUS.COMPLETED'
 } as const;
 
 export type PostStatus = typeof POST_STATUS_CODES[keyof typeof POST_STATUS_CODES];
 
 // ─────────────────────────────────────────────────────────────
+// APPLICATION STATUS
+// ─────────────────────────────────────────────────────────────
+export const APPLICATION_STATUS_CODES = {
+  PENDING:   'APPLICATION_STATUS.PENDING',
+  ACCEPTED:  'APPLICATION_STATUS.ACCEPTED',
+  REJECTED:  'APPLICATION_STATUS.REJECTED',
+  WITHDRAWN: 'APPLICATION_STATUS.WITHDRAWN'
+} as const;
+
+export type ApplicationStatus = typeof APPLICATION_STATUS_CODES[keyof typeof APPLICATION_STATUS_CODES];
+
+/** Maps an application status code → human label */
+export function getLabelForApplicationStatus(code: string | undefined, fallback = '—'): string {
+  const map: Record<string, string> = {
+    [APPLICATION_STATUS_CODES.PENDING]:   'Pending',
+    [APPLICATION_STATUS_CODES.ACCEPTED]:  'Accepted',
+    [APPLICATION_STATUS_CODES.REJECTED]:  'Rejected',
+    [APPLICATION_STATUS_CODES.WITHDRAWN]: 'Withdrawn'
+  };
+  return code ? (map[code] ?? code) : fallback;
+}
+
+// ─────────────────────────────────────────────────────────────
 // ROUTES
 // ─────────────────────────────────────────────────────────────
 export const APP_ROUTES = {
-  SPLASH:       '/splash',
-  LOGIN:        '/login',
-  SIGNUP:       '/signup',
-  ONBOARDING:   '/tabs/onboarding',
-  HOME:         '/tabs/home',
-  POST:         '/tabs/post',
-  PROFILE:      '/tabs/profile',
-  CHAT:         '/tabs/chat',
-  APPLICATIONS: '/tabs/applications'
+  SPLASH:             '/splash',
+  LOGIN:              '/login',
+  SIGNUP:             '/signup',
+  ONBOARDING:         '/tabs/onboarding',
+  HOME:               '/tabs/home',
+  POST:               '/tabs/post',
+  PROFILE:            '/tabs/profile',
+  CHAT:               '/tabs/chat',
+  APPLICATIONS:       '/tabs/applications',
+  POST_DETAIL:        '/tabs/post-detail',
+  APPLICATION_DETAIL: '/tabs/application-detail'
 } as const;
 
 // ─────────────────────────────────────────────────────────────
@@ -114,7 +140,14 @@ export const APP_ROUTES = {
 export const APP_CONTEXT = 'HUSTLEHUB';
 
 // ─────────────────────────────────────────────────────────────
+// PAGINATION
+// ─────────────────────────────────────────────────────────────
+/** Default page size for all Firestore list queries */
+export const PAGE_SIZE = 5;
+
+// ─────────────────────────────────────────────────────────────
 // LABEL LOOKUP HELPERS
+
 // Use these in templates instead of displaying raw code values.
 // ─────────────────────────────────────────────────────────────
 
@@ -155,7 +188,8 @@ export function getLabelForPostStatus(code: string | undefined, fallback = '—'
   const map: Record<string, string> = {
     [POST_STATUS_CODES.OPEN]:        'Open',
     [POST_STATUS_CODES.CLOSED]:      'Closed',
-    [POST_STATUS_CODES.IN_PROGRESS]: 'In Progress'
+    [POST_STATUS_CODES.IN_PROGRESS]: 'In Progress',
+    [POST_STATUS_CODES.COMPLETED]:   'Completed'
   };
   return code ? (map[code] ?? code) : fallback;
 }

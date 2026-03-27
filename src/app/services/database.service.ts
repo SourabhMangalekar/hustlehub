@@ -9,7 +9,14 @@ import {
   query,
   getDocs,
   where,
-  updateDoc
+  updateDoc,
+  increment,
+  writeBatch,
+  limit,
+  orderBy,
+  startAfter,
+  QueryDocumentSnapshot,
+  DocumentData
 } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
 import {
@@ -18,13 +25,27 @@ import {
   UserRoleSubtype,
   UserStatus,
   PostStatus,
+  ApplicationStatus,
   ROLE_CODES,
   POST_STATUS_CODES,
-  USER_STATUS_CODES
+  USER_STATUS_CODES,
+  APPLICATION_STATUS_CODES,
+  PAGE_SIZE
 } from '../core/master-data';
 
+// ─────────────────────────────────────────────────────────────
+// PAGINATION TYPES
+// ─────────────────────────────────────────────────────────────
+export type PageCursor = QueryDocumentSnapshot<DocumentData>;
+
+export interface PaginatedResult<T> {
+  items: T[];
+  /** Pass this as cursor to the next call to get the next page. Null = no more pages. */
+  nextCursor: PageCursor | null;
+}
+
 // Re-export types so existing imports from this service still work
-export type { UserRole, UserRoleSubtype, UserStatus, PostStatus };
+export type { UserRole, UserRoleSubtype, UserStatus, PostStatus, ApplicationStatus };
 
 // ─────────────────────────────────────────────────────────────
 // USER DOCUMENT  (apps/HUSTLEHUB/users/{uid})
@@ -93,7 +114,6 @@ export interface Post {
     platform?: string;
     deliverables?: string;
     eventDate?: string;
-    additionalRequirements?: string;
   };
 
   stats: {
@@ -110,15 +130,29 @@ export interface Post {
 }
 
 // ─────────────────────────────────────────────────────────────
-// APPLICATION DOCUMENT  (apps/HUSTLEHUB/applications/{id})
+// APPLICATION DOCUMENT  (apps/HUSTLEHUB/applications/{postId_applicantId})
+//
+// applicationId = postId + "_" + applicantId  → prevents duplicates
+// applicantSnapshot → avoids extra user reads (denormalization)
 // ─────────────────────────────────────────────────────────────
+export interface ApplicantSnapshot {
+  name: string;
+  profileImage?: string;
+  city?: string;
+  roleSubtype?: string;
+  rating: number;
+  reviewCount: number;
+  followers?: number;
+}
+
 export interface Application {
   id?: string;
 
   profile: {
     postId: string;
+    postTitle: string;
     applicantId: string;
-    applicantRoleSubtype?: string;
+    applicantSnapshot: ApplicantSnapshot;
     message?: string;
     priceQuoted?: number;
   };
@@ -129,7 +163,8 @@ export interface Application {
   };
 
   system: {
-    status: 'APPLICATION_STATUS.PENDING' | 'APPLICATION_STATUS.ACCEPTED' | 'APPLICATION_STATUS.REJECTED' | 'APPLICATION_STATUS.WITHDRAWN';
+    status: ApplicationStatus;
+    statusUpdatedAt: number;
     createdAt: number;
     updatedAt: number;
   };
@@ -157,6 +192,11 @@ export interface Review {
 // ─────────────────────────────────────────────────────────────
 // NOTIFICATION DOCUMENT  (apps/HUSTLEHUB/notifications/{id})
 // ─────────────────────────────────────────────────────────────
+export type NotificationType =
+  | 'NOTIFICATION_TYPE.APPLICATION'
+  | 'NOTIFICATION_TYPE.CHAT'
+  | 'NOTIFICATION_TYPE.SYSTEM';
+
 export interface Notification {
   id?: string;
 
@@ -164,7 +204,7 @@ export interface Notification {
     userId: string;
     title: string;
     message: string;
-    type: 'NOTIFICATION_TYPE.APPLICATION' | 'NOTIFICATION_TYPE.CHAT' | 'NOTIFICATION_TYPE.SYSTEM';
+    type: NotificationType;
   };
 
   system: {
@@ -199,8 +239,8 @@ export class DatabaseService {
     const newUser: UserProfile = {
       profile: {
         name: data.name,
-        email: data.email,
-        phone: data.phone
+        ...(data.email && { email: data.email }),
+        ...(data.phone && { phone: data.phone })
       },
       meta: {},
       stats: {
@@ -226,6 +266,7 @@ export class DatabaseService {
     return snap.exists() ? (snap.data() as UserProfile) : null;
   }
 
+  /** Supports Firestore dot-notation for partial nested updates e.g. 'system.role' */
   async updateUserProfile(uid: string, data: Record<string, any>) {
     const userRef = doc(this.db, this.getTenantPath('users'), uid);
     return updateDoc(userRef, { ...data, 'system.updatedAt': Date.now() });
@@ -233,7 +274,13 @@ export class DatabaseService {
 
   // ─── POSTS ─────────────────────────────────────────────────
 
-  async createPost(data: { title: string; description: string; budget: string; city?: string; createdBy: string }) {
+  async createPost(data: {
+    title: string;
+    description: string;
+    budget: string;
+    city?: string;
+    createdBy: string;
+  }) {
     const postsRef = collection(this.db, this.getTenantPath('posts'));
     const now = Date.now();
 
@@ -242,7 +289,7 @@ export class DatabaseService {
         title: data.title,
         description: data.description,
         budget: data.budget,
-        city: data.city
+        ...(data.city && { city: data.city })
       },
       meta: {},
       stats: {
@@ -259,40 +306,206 @@ export class DatabaseService {
     return addDoc(postsRef, newPost);
   }
 
-  async getRecentPosts(): Promise<Post[]> {
+  async getPostById(postId: string): Promise<Post | null> {
+    const postRef = doc(this.db, this.getTenantPath('posts'), postId);
+    const snap = await getDoc(postRef);
+    return snap.exists() ? ({ id: snap.id, ...snap.data() } as Post) : null;
+  }
+
+  async getRecentPosts(cursor?: PageCursor | null): Promise<PaginatedResult<Post>> {
     const postsRef = collection(this.db, this.getTenantPath('posts'));
-    const q = query(postsRef, where('system.status', '==', POST_STATUS_CODES.OPEN));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() } as Post));
+    const constraints: any[] = [
+      where('system.status', '==', POST_STATUS_CODES.OPEN),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(postsRef, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Post)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
   }
 
-  // ─── APPLICATIONS (stub) ───────────────────────────────────
+  async getMyPosts(uid: string, cursor?: PageCursor | null): Promise<PaginatedResult<Post>> {
+    const postsRef = collection(this.db, this.getTenantPath('posts'));
+    const constraints: any[] = [
+      where('system.createdBy', '==', uid),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(postsRef, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Post)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
+  }
 
-  async createApplication(data: Omit<Application, 'id'>) {
+  // ─── APPLICATIONS ──────────────────────────────────────────
+
+  /**
+   * Apply to a post.
+   * Uses deterministic applicationId = postId_applicantId to prevent duplicates.
+   * Atomically:
+   *  1. Creates the application document
+   *  2. Increments post.stats.applicationCount
+   *  3. Creates a notification for the post owner
+   */
+  async applyToPost(params: {
+    postId: string;
+    postTitle: string;
+    postOwnerId: string;
+    applicant: UserProfile;
+    message?: string;
+    priceQuoted?: number;
+    portfolioLinks?: string[];
+  }): Promise<void> {
+    const { postId, postTitle, postOwnerId, applicant, message, priceQuoted, portfolioLinks } = params;
+    const applicantId = applicant.system.uid;
+    const applicationId = `${postId}_${applicantId}`;
+    const now = Date.now();
+
+    // Build applicant snapshot — only display data, no full profile copy
+    const applicantSnapshot: ApplicantSnapshot = {
+      name:          applicant.profile.name,
+      rating:        applicant.stats.rating,
+      reviewCount:   applicant.stats.reviewCount,
+      ...(applicant.profile.profileImage && { profileImage: applicant.profile.profileImage }),
+      ...(applicant.profile.city && { city: applicant.profile.city }),
+      ...(applicant.system.roleSubtype && { roleSubtype: applicant.system.roleSubtype }),
+      ...(applicant.meta.social?.followers && { followers: applicant.meta.social.followers })
+    };
+
+    const applicationData: Omit<Application, 'id'> = {
+      profile: {
+        postId,
+        postTitle,
+        applicantId,
+        applicantSnapshot,
+        ...(message && { message }),
+        ...(priceQuoted !== undefined && { priceQuoted })
+      },
+      meta: {
+        portfolioLinks: portfolioLinks ?? []
+      },
+      system: {
+        status:          APPLICATION_STATUS_CODES.PENDING,
+        statusUpdatedAt: now,
+        createdAt:       now,
+        updatedAt:       now
+      }
+    };
+
+    // Notification document for the post owner
+    const notificationData: Omit<Notification, 'id'> = {
+      profile: {
+        userId:  postOwnerId,
+        title:   'New Application Received',
+        message: `${applicant.profile.name} applied to your post "${postTitle}"`,
+        type:    'NOTIFICATION_TYPE.APPLICATION'
+      },
+      system: {
+        isRead:    false,
+        createdAt: now
+      }
+    };
+
+    // Batch write: application + post counter increment + notification
+    const batch = writeBatch(this.db);
+
+    const appRef = doc(this.db, this.getTenantPath('applications'), applicationId);
+    batch.set(appRef, applicationData);
+
+    const postRef = doc(this.db, this.getTenantPath('posts'), postId);
+    batch.update(postRef, { 'stats.applicationCount': increment(1) });
+
+    const notifRef = doc(collection(this.db, this.getTenantPath('notifications')));
+    batch.set(notifRef, notificationData);
+
+    await batch.commit();
+  }
+
+
+  async getApplicationsForPost(postId: string, cursor?: PageCursor | null): Promise<PaginatedResult<Application>> {
     const ref = collection(this.db, this.getTenantPath('applications'));
-    return addDoc(ref, data);
+    const constraints: any[] = [
+      where('profile.postId', '==', postId),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(ref, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Application)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
   }
 
-  async getApplicationsForPost(postId: string): Promise<Application[]> {
+  async getMyApplications(applicantId: string, cursor?: PageCursor | null): Promise<PaginatedResult<Application>> {
     const ref = collection(this.db, this.getTenantPath('applications'));
-    const q = query(ref, where('profile.postId', '==', postId));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() } as Application));
+    const constraints: any[] = [
+      where('profile.applicantId', '==', applicantId),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(ref, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Application)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
   }
 
-  // ─── REVIEWS (stub) ────────────────────────────────────────
+  async getApplicationById(applicationId: string): Promise<Application | null> {
+    const appRef = doc(this.db, this.getTenantPath('applications'), applicationId);
+    const snap = await getDoc(appRef);
+    return snap.exists() ? ({ id: snap.id, ...snap.data() } as Application) : null;
+  }
+
+  /**
+   * Check if user has already applied to a post.
+   * Uses deterministic ID — no extra Firestore read.
+   */
+  async hasApplied(postId: string, applicantId: string): Promise<boolean> {
+    const applicationId = `${postId}_${applicantId}`;
+    const appRef = doc(this.db, this.getTenantPath('applications'), applicationId);
+    const snap = await getDoc(appRef);
+    return snap.exists();
+  }
+
+  /** Update application status (accept / reject / withdraw) */
+  async updateApplicationStatus(applicationId: string, status: ApplicationStatus): Promise<void> {
+    const appRef = doc(this.db, this.getTenantPath('applications'), applicationId);
+    const now = Date.now();
+    return updateDoc(appRef, {
+      'system.status':          status,
+      'system.statusUpdatedAt': now,
+      'system.updatedAt':       now
+    });
+  }
+
+  // ─── REVIEWS ───────────────────────────────────────────────
 
   async createReview(data: Omit<Review, 'id'>) {
     const ref = collection(this.db, this.getTenantPath('reviews'));
     return addDoc(ref, data);
   }
 
-  // ─── NOTIFICATIONS (stub) ──────────────────────────────────
+  // ─── NOTIFICATIONS ─────────────────────────────────────────
 
-  async getNotifications(userId: string): Promise<Notification[]> {
+  async getNotifications(userId: string, cursor?: PageCursor | null): Promise<PaginatedResult<Notification>> {
     const ref = collection(this.db, this.getTenantPath('notifications'));
-    const q = query(ref, where('profile.userId', '==', userId));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() } as Notification));
+    const constraints: any[] = [
+      where('profile.userId', '==', userId),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(ref, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Notification)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
+  }
+
+  async markNotificationRead(notificationId: string): Promise<void> {
+    const ref = doc(this.db, this.getTenantPath('notifications'), notificationId);
+    return updateDoc(ref, { 'system.isRead': true });
   }
 }

@@ -69,36 +69,24 @@
   }
 }
 
-.categories-scroll {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding: 15px 0;
-  margin-top: 5px;
-  
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;  
-  scrollbar-width: none;  
+.segment-wrapper {
+  margin: 15px 0 5px;
 }
 
-.category-pill {
-  padding: 8px 18px;
-  background: var(--app-glass-bg);
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--app-text-secondary);
-  white-space: nowrap;
+.feed-segment {
+  --background: var(--app-glass-bg);
+  border-radius: 12px;
   border: 1px solid var(--app-border-color);
-  transition: all 0.3s ease;
+  padding: 3px;
 
-  &.active {
-    background: var(--ion-color-primary);
-    color: var(--app-text-main);
-    border-color: var(--ion-color-primary);
-    box-shadow: 0 4px 12px var(--app-glow-primary);
+  .segment-btn {
+    --color: var(--app-text-secondary);
+    --color-checked: var(--app-text-main);
+    --indicator-color: var(--ion-color-primary);
+    --indicator-border-radius: 10px;
+    --border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
   }
 }
 
@@ -122,6 +110,12 @@
   border: 1px solid var(--app-border-color-alt);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .card-header {
@@ -138,9 +132,24 @@
   border-radius: 8px;
 }
 
-.time-posted {
-  font-size: 0.8rem;
-  color: #6c6c6c;
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.applicant-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--app-text-secondary);
+  font-weight: 500;
+
+  ion-icon {
+    font-size: 1rem;
+  }
 }
 
 .card-title {
@@ -184,14 +193,46 @@
   }
 }
 
-.apply-btn {
-  --background: var(--app-text-main);
-  --color: #000000;
-  --box-shadow: none;
-  font-weight: 700;
-  height: 32px;
-  --padding-start: 15px;
-  --padding-end: 15px;
+.card-arrow {
+  color: var(--app-text-tertiary);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--app-text-secondary);
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  .empty-icon {
+    font-size: 3rem;
+    opacity: 0.4;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.loader-state {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.load-more-wrapper {
+  margin-top: 15px;
+
+  .load-more-btn {
+    --border-radius: 12px;
+    --color: var(--app-text-secondary);
+    --border-color: var(--app-border-color);
+  }
 }
 
 .bottom-spacer {

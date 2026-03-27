@@ -1,0 +1,111 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Application Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-detail-content" scroll-y="true">
+  <div class="loader-state" *ngIf="isLoading()">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
+
+  <div class="content-wrapper" *ngIf="!isLoading() && application()">
+    
+    <!-- Profile Card -->
+    <div class="detail-card profile-card">
+      <div class="card-badges">
+        <ion-badge color="tertiary" class="category-badge">
+          {{ getLabelForCity(application()?.profile?.applicantSnapshot?.city) }}
+        </ion-badge>
+        
+        <ion-badge class="status-badge"
+          [color]="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING ? 'warning' :
+                   application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED ? 'success' :
+                   application()?.system?.status === APPLICATION_STATUS_CODES.REJECTED ? 'danger' : 'medium'">
+          {{ getLabelForApplicationStatus(application()?.system?.status) }}
+        </ion-badge>
+      </div>
+
+      <div class="profile-header">
+        <ion-avatar class="main-avatar">
+          <img [src]="application()?.profile?.applicantSnapshot?.profileImage || 'https://i.pravatar.cc/150'" />
+        </ion-avatar>
+        
+        <div class="name-block">
+          <h1 class="applicant-name">{{ application()?.profile?.applicantSnapshot?.name }}</h1>
+          <span class="subtype">{{ getLabelForSubtype(application()?.profile?.applicantSnapshot?.roleSubtype) }}</span>
+        </div>
+      </div>
+
+      <div class="stats-row" *ngIf="application()?.profile?.applicantSnapshot?.rating! > 0">
+        <div class="rating">
+          <ion-icon name="star"></ion-icon>
+          <span>{{ application()?.profile?.applicantSnapshot?.rating }} ({{ application()?.profile?.applicantSnapshot?.reviewCount }} reviews)</span>
+        </div>
+        <div class="followers" *ngIf="application()?.profile?.applicantSnapshot?.followers">
+          <ion-icon name="people-outline"></ion-icon>
+          <span>{{ application()?.profile?.applicantSnapshot?.followers }} followers</span>
+        </div>
+      </div>
+      
+      <div class="quote-row" *ngIf="application()?.profile?.priceQuoted">
+        <span class="prop-label">Price Quoted</span>
+        <span class="quote-value">
+          <ion-icon name="cash-outline"></ion-icon> {{ application()?.profile?.priceQuoted }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Message Card -->
+    <div class="detail-card message-card" *ngIf="application()?.profile?.message">
+      <h3 class="section-title">Cover Message</h3>
+      <p class="description-text">{{ application()?.profile?.message }}</p>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>
+
+<!-- Fixed Footer for Actions -->
+<ion-footer class="ion-no-border action-footer" *ngIf="!isLoading() && application()">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <div class="footer-content">
+
+      <!-- ============================== -->
+      <!-- POST OWNER CONTROLS            -->
+      <!-- ============================== -->
+      <ng-container *ngIf="isPostOwnerView">
+        <div class="action-row" *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING">
+          <ion-button expand="block" shape="round" fill="outline" color="danger" class="half-btn"
+                      (click)="setApplicationStatus(APPLICATION_STATUS_CODES.REJECTED)">
+            Reject
+          </ion-button>
+          <ion-button expand="block" shape="round" color="success" class="half-btn"
+                      (click)="setApplicationStatus(APPLICATION_STATUS_CODES.ACCEPTED)">
+            Accept
+          </ion-button>
+        </div>
+
+        <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                    *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED" disabled>
+          Accepted ✓
+        </ion-button>
+      </ng-container>
+
+      <!-- ============================== -->
+      <!-- APPLICANT CONTROLS             -->
+      <!-- ============================== -->
+      <ng-container *ngIf="isApplicantView">
+        <ion-button expand="block" shape="round" color="danger" fill="outline" class="main-action-btn"
+                    *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING"
+                    (click)="confirmWithdraw()">
+          Withdraw Application
+        </ion-button>
+      </ng-container>
+
+    </div>
+  </ion-toolbar>
+</ion-footer>

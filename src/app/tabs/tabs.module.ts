@@ -12,6 +12,8 @@ import { ApplicationsComponent } from './applications/applications.component';
 import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnboardingComponent } from '../pages/onboarding/onboarding.component';
+import { PostDetailComponent } from './post-detail/post-detail.component';
+import { ApplicationDetailComponent } from './application-detail/application-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { OnboardingComponent } from '../pages/onboarding/onboarding.component';
     ApplicationsComponent,
     ChatComponent,
     ProfileComponent,
-    OnboardingComponent
+    OnboardingComponent,
+    PostDetailComponent,
+    ApplicationDetailComponent
   ],
   imports: [
     CommonModule,

@@ -7,6 +7,8 @@ import { ApplicationsComponent } from './applications/applications.component';
 import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnboardingComponent } from '../pages/onboarding/onboarding.component';
+import { PostDetailComponent } from './post-detail/post-detail.component';
+import { ApplicationDetailComponent } from './application-detail/application-detail.component';
 
 const routes: Routes = [
   {
@@ -16,9 +18,12 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'post', component: PostComponent },
       { path: 'applications', component: ApplicationsComponent },
+      { path: 'applications/:postId', component: ApplicationsComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'onboarding', component: OnboardingComponent },
+      { path: 'post-detail/:id', component: PostDetailComponent },
+      { path: 'application-detail/:id', component: ApplicationDetailComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
