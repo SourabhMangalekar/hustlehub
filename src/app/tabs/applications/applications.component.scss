@@ -6,8 +6,10 @@
 }
 
 .transparent-toolbar {
-  --background: transparent;
-  --border-width: 0;
+  --background: rgba(9, 10, 15, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--app-border-color-alt);
 }
 
 .header-avatar {
