@@ -17,15 +17,15 @@
   width: 100px;
   height: 100px;
   background: var(--app-glass-bg);
-  border-radius: 25px;
+  border-radius: var(--app-radius-xl);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--app-spacing-xl);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(8.5px);
   -webkit-backdrop-filter: blur(8.5px);
-  border: 1px solid var(--app-border-color);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
   animation: pulseLogo 2.5s infinite ease-in-out;
 }
 
@@ -36,7 +36,7 @@
 
 .brand-title {
   font-size: 2.8rem;
-  font-weight: 800;
+  font-weight: var(--app-font-weight-extrabold);
   margin: 0;
   letter-spacing: 1px;
 }
@@ -46,23 +46,23 @@
 }
 
 .brand-subtitle {
-  font-size: 1rem;
+  font-size: var(--app-font-size-md);
   color: var(--app-text-secondary);
-  margin-top: 10px;
+  margin-top: var(--app-spacing-md);
   letter-spacing: 0.5px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .loader {
   display: flex;
-  gap: 8px;
+  gap: var(--app-spacing-sm);
   margin-top: 60px;
 
   .dot {
     width: 10px;
     height: 10px;
     background-color: var(--ion-color-primary);
-    border-radius: 50%;
+    border-radius: var(--app-radius-round);
     animation: bounce 1.4s infinite ease-in-out both;
 
     &:nth-child(1) { animation-delay: -0.32s; }

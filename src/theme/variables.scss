@@ -35,6 +35,60 @@
   /** Status Colors **/
   --app-color-success: #34c759;
   --app-color-danger: #ff4961;
+
+  /** ──────────────────────────────────────────
+      STRUCTURAL & DESIGN SYSTEM TOKENS
+      ────────────────────────────────────────── **/
+
+  /** Typography **/
+  --app-font-family: 'Inter', sans-serif;
+  --app-font-size-xs: 0.75rem;    // 12px
+  --app-font-size-sm: 0.85rem;    // 13.6px
+  --app-font-size-md: 0.9rem;     // 14.4px
+  --app-font-size-base: 0.95rem;  // 15.2px
+  --app-font-size-lg: 1.05rem;    // 16.8px
+  --app-font-size-xl: 1.15rem;    // 18.4px
+  --app-font-size-2xl: 1.8rem;    // 28.8px
+
+  --app-font-weight-regular: 400;
+  --app-font-weight-medium: 500;
+  --app-font-weight-semibold: 600;
+  --app-font-weight-bold: 700;
+  --app-font-weight-extrabold: 800;
+
+  --app-line-height-tight: 1.3;
+  --app-line-height-base: 1.5;
+
+  /** Border Radii **/
+  --app-radius-xs: 8px;     // badges
+  --app-radius-sm: 12px;    // small buttons, inputs
+  --app-radius-md: 16px;    // inner cards
+  --app-radius-lg: 20px;    // base cards
+  --app-radius-xl: 24px;    // large cards
+  --app-radius-round: 50%;
+
+  /** Spacing System **/
+  --app-spacing-xs: 4px;
+  --app-spacing-sm: 8px;
+  --app-spacing-md: 12px;
+  --app-spacing-lg: 15px;
+  --app-spacing-xl: 20px;   // screen margin
+  --app-spacing-2xl: 30px;
+
+  /** Transitions **/
+  --app-transition-fast: 0.15s ease;
+  --app-transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /** Glassmorphism **/
+  --app-glass-blur-sm: 10px;
+  --app-glass-blur-md: 15px;
+  --app-glass-blur-lg: 20px;
+  --app-glass-border-width: 1px;
+
+  /** Standard Layout Shadows **/
+  --app-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --app-shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --app-shadow-float: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 // Ensure the default dark preference applies correctly

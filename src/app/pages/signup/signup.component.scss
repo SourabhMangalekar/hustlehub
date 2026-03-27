@@ -1,6 +1,6 @@
 .auth-content {
   --background: radial-gradient(circle at center, var(--app-background-gradient-start) 0%, var(--app-background) 100%);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .auth-container {
@@ -8,34 +8,34 @@
   flex-direction: column;
   justify-content: center;
   min-height: 100%;
-  padding: 30px 20px;
+  padding: var(--app-spacing-2xl) var(--app-spacing-xl);
   color: var(--app-text-main);
   animation: fadeIn 0.6s ease-out;
 }
 
 .header-section {
   text-align: center;
-  margin-bottom: 30px;
-  margin-top: 20px;
+  margin-bottom: var(--app-spacing-2xl);
+  margin-top: var(--app-spacing-xl);
 }
 
 .auth-title {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: var(--app-font-size-2xl);
+  font-weight: var(--app-font-weight-extrabold);
   margin: 0;
   letter-spacing: 0.5px;
 }
 
 .auth-subtitle {
-  font-size: 0.95rem;
+  font-size: var(--app-font-size-base);
   color: var(--app-text-secondary);
-  margin-top: 8px;
+  margin-top: var(--app-spacing-sm);
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--app-spacing-lg);
 }
 
 .input-group {
@@ -45,11 +45,11 @@
 
 .custom-input {
   --background: var(--app-glass-bg);
-  --border-radius: 16px;
-  --padding-start: 15px;
-  border: 1px solid var(--app-border-color);
-  border-radius: 16px;
-  transition: all 0.3s ease;
+  --border-radius: var(--app-radius-md);
+  --padding-start: var(--app-spacing-lg);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
+  border-radius: var(--app-radius-md);
+  transition: all var(--app-transition-smooth);
 
   &:focus-within {
     border-color: var(--ion-color-primary);
@@ -59,32 +59,32 @@
   ion-input {
     --color: var(--app-text-main);
     --placeholder-color: var(--app-text-tertiary);
-    font-size: 1rem;
+    font-size: var(--app-font-size-base);
   }
 
   ion-icon {
-    margin-right: 15px;
+    margin-right: var(--app-spacing-lg);
   }
 }
 
 .error-msg {
   color: var(--app-color-danger);
-  font-size: 0.8rem;
+  font-size: var(--app-font-size-xs);
   padding-left: 10px;
-  margin-top: 5px;
+  margin-top: var(--app-spacing-xs);
 }
 
 .auth-btn {
   --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
   --background-hover: linear-gradient(135deg, var(--app-gradient-secondary) 0%, var(--ion-color-primary) 100%);
-  --border-radius: 16px;
+  --border-radius: var(--app-radius-md);
   --box-shadow: 0 4px 15px var(--app-glow-primary);
-  margin-top: 15px;
+  margin-top: var(--app-spacing-lg);
   height: 52px;
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-weight: var(--app-font-weight-semibold);
+  font-size: var(--app-font-size-lg);
   letter-spacing: 0.5px;
-  transition: transform 0.2s ease;
+  transition: transform var(--app-transition-fast);
 
   &:active {
     transform: scale(0.98);
@@ -93,14 +93,14 @@
 
 .footer-section {
   text-align: center;
-  margin-top: 30px;
-  margin-bottom: 20px;
-  font-size: 0.95rem;
+  margin-top: var(--app-spacing-2xl);
+  margin-bottom: var(--app-spacing-xl);
+  font-size: var(--app-font-size-base);
   color: var(--app-text-secondary);
 
   .highlight-link {
     color: var(--ion-color-primary);
-    font-weight: 600;
+    font-weight: var(--app-font-weight-semibold);
     text-decoration: none;
     margin-left: 5px;
   }
@@ -112,11 +112,11 @@
 }
 
 .role-selector {
-  margin-bottom: 5px;
+  margin-bottom: var(--app-spacing-xs);
 
   ion-segment {
     --background: var(--app-glass-bg);
-    border-radius: 12px;
+    border-radius: var(--app-radius-sm);
     padding: 3px;
 
     ion-segment-button {
@@ -124,9 +124,9 @@
       --color-checked: var(--app-text-main);
       --background-checked: rgba(var(--ion-color-primary-rgb), 0.9);
       --indicator-color: transparent;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      border-radius: var(--app-radius-xs);
+      font-weight: var(--app-font-weight-semibold);
+      font-size: var(--app-font-size-base);
       min-height: 44px;
     }
   }

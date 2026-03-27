@@ -7,16 +7,16 @@
 
 .transparent-toolbar {
   --background: rgba(9, 10, 15, 0.85); /* #090a0f */
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid var(--app-border-color-alt);
+  backdrop-filter: blur(var(--app-glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--app-glass-blur-md));
+  border-bottom: var(--app-glass-border-width) solid var(--app-border-color-alt);
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px var(--app-spacing-xl);
 }
 
 .user-greeting {
@@ -26,15 +26,15 @@
 
 .greeting-text {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--app-font-size-md);
   color: var(--app-text-secondary);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .header-title {
   margin: 2px 0 0 0;
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: var(--app-font-size-2xl);
+  font-weight: var(--app-font-weight-extrabold);
   color: var(--app-text-main);
 }
 
@@ -47,73 +47,73 @@
 
 .dashboard-content {
   --background: var(--app-background);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .feed-container {
-  padding: 0 20px;
+  padding: 0 var(--app-spacing-xl);
 }
 
 .search-wrapper {
-  margin-top: 10px;
+  margin-top: var(--app-spacing-md);
 }
 
 .custom-searchbar {
   --background: var(--app-glass-bg);
-  --border-radius: 16px;
+  --border-radius: var(--app-radius-md);
   --icon-color: var(--app-text-tertiary);
   --placeholder-color: var(--app-text-tertiary);
   --color: var(--app-text-main);
   padding: 0;
   
   .searchbar-input {
-    border: 1px solid var(--app-border-color);
+    border: var(--app-glass-border-width) solid var(--app-border-color);
   }
 }
 
 .segment-wrapper {
-  margin: 15px 0 5px;
+  margin: var(--app-spacing-lg) 0 var(--app-spacing-sm);
 }
 
 .feed-segment {
   --background: var(--app-glass-bg);
-  border-radius: 12px;
-  border: 1px solid var(--app-border-color);
+  border-radius: var(--app-radius-sm);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
   padding: 3px;
 
   .segment-btn {
     --color: var(--app-text-secondary);
     --color-checked: var(--app-text-main);
     --indicator-color: var(--ion-color-primary);
-    --indicator-border-radius: 10px;
-    --border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
+    --indicator-border-radius: var(--app-radius-sm);
+    --border-radius: var(--app-radius-sm);
+    font-weight: var(--app-font-weight-semibold);
+    font-size: var(--app-font-size-md);
   }
 }
 
 .section-heading {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: var(--app-font-size-xl);
+  font-weight: var(--app-font-weight-bold);
   color: var(--app-text-main);
-  margin: 15px 0;
+  margin: var(--app-spacing-lg) 0;
 }
 
 .cards-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--app-spacing-lg);
 }
 
 .requirement-card {
   background: var(--app-glass-bg-alt);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid var(--app-border-color-alt);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--app-radius-lg);
+  padding: var(--app-spacing-xl);
+  border: var(--app-glass-border-width) solid var(--app-border-color-alt);
+  backdrop-filter: blur(var(--app-glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--app-glass-blur-sm));
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform var(--app-transition-fast), box-shadow var(--app-transition-fast);
 
   &:active {
     transform: scale(0.98);
@@ -124,30 +124,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--app-spacing-md);
 }
 
 .category-badge {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   letter-spacing: 0.5px;
   padding: 5px 10px;
-  border-radius: 8px;
+  border-radius: var(--app-radius-xs);
 }
 
 .status-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--app-font-size-xs);
+  font-weight: var(--app-font-weight-semibold);
   padding: 4px 10px;
-  border-radius: 8px;
+  border-radius: var(--app-radius-xs);
 }
 
 .applicant-count {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.82rem;
+  gap: var(--app-spacing-xs);
+  font-size: var(--app-font-size-sm);
   color: var(--app-text-secondary);
-  font-weight: 500;
+  font-weight: var(--app-font-weight-medium);
 
   ion-icon {
     font-size: 1rem;
@@ -155,18 +155,18 @@
 }
 
 .card-title {
-  margin: 0 0 8px 0;
-  font-size: 1.15rem;
-  font-weight: 700;
+  margin: 0 0 var(--app-spacing-sm) 0;
+  font-size: var(--app-font-size-xl);
+  font-weight: var(--app-font-weight-bold);
   color: var(--app-text-main);
-  line-height: 1.4;
+  line-height: var(--app-line-height-base);
 }
 
 .card-desc {
-  margin: 0 0 15px 0;
-  font-size: 0.9rem;
+  margin: 0 0 var(--app-spacing-lg) 0;
+  font-size: var(--app-font-size-md);
   color: var(--app-text-secondary);
-  line-height: 1.5;
+  line-height: var(--app-line-height-base);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -178,8 +178,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid var(--app-border-color-alt);
-  padding-top: 12px;
+  border-top: var(--app-glass-border-width) solid var(--app-border-color-alt);
+  padding-top: var(--app-spacing-md);
 }
 
 .budget {
@@ -187,8 +187,8 @@
   align-items: center;
   gap: 6px;
   color: var(--app-color-success);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: var(--app-font-weight-semibold);
+  font-size: var(--app-font-size-base);
 
   ion-icon {
     font-size: 1.1rem;
@@ -209,7 +209,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: var(--app-spacing-md);
 
   .empty-icon {
     font-size: 3rem;
@@ -228,10 +228,10 @@
 }
 
 .load-more-wrapper {
-  margin-top: 15px;
+  margin-top: var(--app-spacing-lg);
 
   .load-more-btn {
-    --border-radius: 12px;
+    --border-radius: var(--app-radius-sm);
     --color: var(--app-text-secondary);
     --border-color: var(--app-border-color);
   }

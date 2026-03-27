@@ -6,11 +6,11 @@
 
 .onboarding-content {
   --background: radial-gradient(circle at top center, var(--app-background-gradient-start) 0%, var(--app-background) 100%);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .onboarding-container {
-  padding: 40px 24px 60px;
+  padding: 40px var(--app-spacing-xl) 60px;
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -20,19 +20,19 @@
 
 .onboarding-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: var(--app-spacing-xl);
 }
 
 .logo-badge {
   width: 60px;
   height: 60px;
   background: var(--app-glass-bg);
-  border-radius: 18px;
+  border-radius: var(--app-radius-md);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto 14px;
-  border: 1px solid var(--app-border-color);
+  margin: 0 auto var(--app-spacing-lg);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
 
   ion-icon {
     font-size: 30px;
@@ -41,15 +41,15 @@
 }
 
 .onboarding-title {
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: var(--app-font-size-2xl);
+  font-weight: var(--app-font-weight-extrabold);
   margin: 0;
   .highlight { color: var(--ion-color-primary); }
 }
 
 .onboarding-subtitle {
   color: var(--app-text-secondary);
-  font-size: 0.9rem;
+  font-size: var(--app-font-size-md);
   margin: 6px 0 0;
 }
 
@@ -59,13 +59,13 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-bottom: 28px;
+  margin-bottom: var(--app-spacing-2xl);
 }
 
 .step-dot {
   width: 10px;
   height: 10px;
-  border-radius: 50%;
+  border-radius: var(--app-radius-round);
   background: var(--app-border-color);
   transition: background 0.4s ease;
 
@@ -92,34 +92,34 @@
 }
 
 .step-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0 0 16px;
+  font-size: var(--app-font-size-xl);
+  font-weight: var(--app-font-weight-bold);
+  margin: 0 0 var(--app-spacing-lg);
   text-align: center;
 }
 
 .step-subtitle {
-  font-size: 0.88rem;
+  font-size: var(--app-font-size-sm);
   color: var(--app-text-secondary);
   text-align: center;
-  margin: -10px 0 20px;
+  margin: -10px 0 var(--app-spacing-xl);
 }
 
 // Role Cards
 .role-cards {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--app-spacing-lg);
 }
 
 .role-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--app-spacing-lg);
   background: var(--app-glass-bg);
-  border: 1px solid var(--app-border-color);
-  border-radius: 18px;
-  padding: 18px 16px;
+  border: var(--app-glass-border-width) solid var(--app-border-color);
+  border-radius: var(--app-radius-md);
+  padding: var(--app-spacing-lg) var(--app-spacing-md);
   cursor: pointer;
   transition: all 0.25s ease;
   -webkit-tap-highlight-color: transparent;
@@ -135,7 +135,7 @@
   width: 48px;
   height: 48px;
   flex-shrink: 0;
-  border-radius: 14px;
+  border-radius: var(--app-radius-sm);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,15 +158,15 @@
 
   h3 {
     margin: 0 0 4px;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: var(--app-font-size-base);
+    font-weight: var(--app-font-weight-bold);
   }
 
   p {
     margin: 0;
-    font-size: 0.82rem;
+    font-size: var(--app-font-size-sm);
     color: var(--app-text-secondary);
-    line-height: 1.45;
+    line-height: var(--app-line-height-base);
   }
 }
 
@@ -179,20 +179,20 @@
 .chip-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--app-spacing-md);
   margin-top: 8px;
 }
 
 .subtype-chip {
-  padding: 16px 20px;
+  padding: var(--app-spacing-lg) var(--app-spacing-xl);
   background: var(--app-glass-bg);
-  border: 1px solid var(--app-border-color);
-  border-radius: 16px;
-  font-size: 1rem;
-  font-weight: 600;
+  border: var(--app-glass-border-width) solid var(--app-border-color);
+  border-radius: var(--app-radius-md);
+  font-size: var(--app-font-size-base);
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text-main);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--app-transition-fast);
   text-align: center;
   -webkit-tap-highlight-color: transparent;
 
@@ -212,8 +212,8 @@
 .meta-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 24px;
+  gap: var(--app-spacing-lg);
+  margin-bottom: var(--app-spacing-xl);
 }
 
 .meta-group {
@@ -222,24 +222,24 @@
 }
 
 .meta-label {
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: var(--app-font-size-sm);
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text-main);
-  margin-bottom: 8px;
+  margin-bottom: var(--app-spacing-sm);
   padding-left: 4px;
 
   .hint {
-    font-weight: 400;
+    font-weight: var(--app-font-weight-regular);
     color: var(--app-text-tertiary);
   }
 }
 
 .meta-input {
   --background: var(--app-glass-bg);
-  --border-radius: 12px;
-  --padding-start: 12px;
-  border: 1px solid var(--app-border-color);
-  border-radius: 12px;
+  --border-radius: var(--app-radius-sm);
+  --padding-start: var(--app-spacing-md);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
+  border-radius: var(--app-radius-sm);
   transition: all 0.25s ease;
 
   &:focus-within {
@@ -250,19 +250,19 @@
   ion-input, ion-textarea {
     --color: var(--app-text-main);
     --placeholder-color: var(--app-text-tertiary);
-    font-size: 0.95rem;
+    font-size: var(--app-font-size-base);
   }
 }
 
 .next-btn {
   --background: var(--app-glass-bg);
   --color: var(--app-text-main);
-  --border-radius: 14px;
+  --border-radius: var(--app-radius-sm);
   --box-shadow: none;
-  border: 1px solid var(--app-border-color);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
   height: 50px;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--app-font-weight-semibold);
+  font-size: var(--app-font-size-base);
 }
 
 // Confirm
@@ -276,29 +276,29 @@
 }
 
 .confirm-icon {
-  margin-bottom: 16px;
+  margin-bottom: var(--app-spacing-lg);
   ion-icon {
     font-size: 80px;
-    color: #34c759;
+    color: var(--app-color-success);
   }
 }
 
 .confirm-desc {
   color: var(--app-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 28px;
+  font-size: var(--app-font-size-base);
+  line-height: var(--app-line-height-base);
+  margin-bottom: var(--app-spacing-2xl);
   max-width: 300px;
 }
 
 .confirm-btn {
   --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
-  --border-radius: 16px;
+  --border-radius: var(--app-radius-md);
   --box-shadow: 0 4px 15px var(--app-glow-primary);
   width: 100%;
   height: 55px;
-  font-weight: 700;
-  font-size: 1.05rem;
+  font-weight: var(--app-font-weight-bold);
+  font-size: var(--app-font-size-lg);
 }
 
 .back-btn {
@@ -308,11 +308,11 @@
   background: none;
   border: none;
   color: var(--app-text-secondary);
-  font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-size: var(--app-font-size-md);
+  font-family: var(--app-font-family);
+  font-weight: var(--app-font-weight-medium);
   cursor: pointer;
-  margin-bottom: 18px;
+  margin-bottom: var(--app-spacing-lg);
   padding: 0;
 
   &.center {

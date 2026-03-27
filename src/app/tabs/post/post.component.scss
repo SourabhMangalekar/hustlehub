@@ -7,48 +7,48 @@
 
 .transparent-toolbar {
   --background: rgba(9, 10, 15, 0.85);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid var(--app-border-color-alt);
+  backdrop-filter: blur(var(--app-glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--app-glass-blur-md));
+  border-bottom: var(--app-glass-border-width) solid var(--app-border-color-alt);
 }
 
 .header-content {
-  padding: 10px 20px;
+  padding: 10px var(--app-spacing-xl);
 }
 
 .header-title {
   margin: 5px 0 0 0;
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: var(--app-font-size-2xl);
+  font-weight: var(--app-font-weight-extrabold);
   color: var(--app-text-main);
   letter-spacing: 0.5px;
 }
 
 .post-content {
   --background: var(--app-background);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .form-container {
-  padding: 10px 20px;
+  padding: 10px var(--app-spacing-xl);
 }
 
 .form-subtitle {
   color: var(--app-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 25px;
+  font-size: var(--app-font-size-base);
+  line-height: var(--app-line-height-base);
+  margin-bottom: var(--app-spacing-xl);
 }
 
 .post-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--app-spacing-xl);
 }
 
 .input-row {
   display: flex;
-  gap: 15px;
+  gap: var(--app-spacing-lg);
 }
 
 .half-width {
@@ -61,20 +61,20 @@
 }
 
 .custom-label {
-  font-size: 0.9rem;
+  font-size: var(--app-font-size-md);
   color: var(--app-text-main);
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: var(--app-font-weight-semibold);
+  margin-bottom: var(--app-spacing-sm);
   padding-left: 5px;
 }
 
 .custom-input {
   --background: var(--app-glass-bg);
-  --border-radius: 12px;
-  --padding-start: 15px;
-  border: 1px solid var(--app-border-color);
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  --border-radius: var(--app-radius-sm);
+  --padding-start: var(--app-spacing-lg);
+  border: var(--app-glass-border-width) solid var(--app-border-color);
+  border-radius: var(--app-radius-sm);
+  transition: all var(--app-transition-smooth);
 
   &:focus-within {
     border-color: var(--ion-color-primary);
@@ -125,14 +125,14 @@
 .submit-btn {
   --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--app-gradient-secondary) 100%);
   --background-hover: linear-gradient(135deg, var(--app-gradient-secondary) 0%, var(--ion-color-primary) 100%);
-  --border-radius: 16px;
+  --border-radius: var(--app-radius-md);
   --box-shadow: 0 4px 15px var(--app-glow-primary);
-  margin-top: 10px;
+  margin-top: var(--app-spacing-md);
   height: 55px;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: var(--app-font-weight-bold);
+  font-size: var(--app-font-size-xl);
   letter-spacing: 0.5px;
-  transition: transform 0.2s ease;
+  transition: transform var(--app-transition-fast);
 
   &:active {
     transform: scale(0.98);
