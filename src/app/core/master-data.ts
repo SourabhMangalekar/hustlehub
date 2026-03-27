@@ -13,7 +13,7 @@
 // array of { code: 'PREFIX.KEY' } items.
 // ─────────────────────────────────────────────────────────────
 type CodesFromArray<T extends readonly { code: string }[]> = {
-  [Item in T[number] as Item['code'] extends `${string}.${infer K}` ? K : never]: Item['code']
+  [Item in T[number]as Item['code'] extends `${string}.${infer K}` ? K : never]: Item['code']
 };
 
 function deriveCodesFromArray<T extends readonly { code: string }[]>(items: T): CodesFromArray<T> {
@@ -26,7 +26,7 @@ function deriveCodesFromArray<T extends readonly { code: string }[]>(items: T): 
 // ROLES
 // ─────────────────────────────────────────────────────────────
 export const ROLES = [
-  { label: 'Find Talent',    code: 'ROLE.DEMAND' },
+  { label: 'Find Talent', code: 'ROLE.DEMAND' },
   { label: 'Offer Services', code: 'ROLE.SUPPLY' }
 ] as const;
 
@@ -34,7 +34,7 @@ export const ROLES = [
 const _ROLE_CODES_DERIVED = deriveCodesFromArray(ROLES);
 export const ROLE_CODES = {
   ..._ROLE_CODES_DERIVED,
-  ADMIN:      'ROLE.ADMIN'      as const,
+  ADMIN: 'ROLE.ADMIN' as const,
   UNASSIGNED: 'ROLE.UNASSIGNED' as const
 };
 
@@ -46,12 +46,12 @@ export type UserRole = typeof ROLE_CODES[keyof typeof ROLE_CODES];
 // ─────────────────────────────────────────────────────────────
 export const ROLE_SUBTYPES = [
   // Demand
-  { label: '🏢 Business / Brand', code: 'ROLE_SUB.BUSINESS',     role: 'ROLE.DEMAND' as const },
-  { label: '💍 Bride (Wedding)',   code: 'ROLE_SUB.BRIDE',        role: 'ROLE.DEMAND' as const },
+  { label: '🏢 Business / Brand', code: 'ROLE_SUB.BUSINESS', role: 'ROLE.DEMAND' as const },
+  { label: '💍 Bride (Wedding)', code: 'ROLE_SUB.BRIDE', role: 'ROLE.DEMAND' as const },
   // Supply
-  { label: '📸 Influencer',        code: 'ROLE_SUB.INFLUENCER',   role: 'ROLE.SUPPLY' as const },
-  { label: '📷 Photographer',      code: 'ROLE_SUB.PHOTOGRAPHER', role: 'ROLE.SUPPLY' as const },
-  { label: '💻 Freelancer',        code: 'ROLE_SUB.FREELANCER',   role: 'ROLE.SUPPLY' as const }
+  { label: '📸 Influencer', code: 'ROLE_SUB.INFLUENCER', role: 'ROLE.SUPPLY' as const },
+  { label: '📷 Photographer', code: 'ROLE_SUB.PHOTOGRAPHER', role: 'ROLE.SUPPLY' as const },
+  { label: '💻 Freelancer', code: 'ROLE_SUB.FREELANCER', role: 'ROLE.SUPPLY' as const }
 ] as const;
 
 export const SUBTYPE_CODES = deriveCodesFromArray(ROLE_SUBTYPES);
@@ -62,10 +62,10 @@ export type UserRoleSubtype = typeof SUBTYPE_CODES[keyof typeof SUBTYPE_CODES];
 // To add a new city: add one entry here, CITY_CODES updates automatically.
 // ─────────────────────────────────────────────────────────────
 export const CITIES = [
-  { label: 'Pune',       code: 'CITY.PUNE'       },
-  { label: 'Mumbai',     code: 'CITY.MUMBAI'     },
-  { label: 'Delhi',      code: 'CITY.DELHI'      },
-  { label: 'Bangalore',  code: 'CITY.BANGALORE'  }
+  { label: 'Pune', code: 'CITY.PUNE' },
+  { label: 'Mumbai', code: 'CITY.MUMBAI' },
+  { label: 'Delhi', code: 'CITY.DELHI' },
+  { label: 'Bangalore', code: 'CITY.BANGALORE' }
 ] as const;
 
 export const CITY_CODES = deriveCodesFromArray(CITIES);
@@ -75,7 +75,7 @@ export type UserCity = typeof CITY_CODES[keyof typeof CITY_CODES];
 // USER STATUS
 // ─────────────────────────────────────────────────────────────
 export const USER_STATUS_CODES = {
-  ACTIVE:  'USER_STATUS.ACTIVE',
+  ACTIVE: 'USER_STATUS.ACTIVE',
   BLOCKED: 'USER_STATUS.BLOCKED',
   DELETED: 'USER_STATUS.DELETED'
 } as const;
@@ -86,10 +86,10 @@ export type UserStatus = typeof USER_STATUS_CODES[keyof typeof USER_STATUS_CODES
 // POST STATUS
 // ─────────────────────────────────────────────────────────────
 export const POST_STATUS_CODES = {
-  OPEN:        'POST_STATUS.OPEN',
-  CLOSED:      'POST_STATUS.CLOSED',
+  OPEN: 'POST_STATUS.OPEN',
+  CLOSED: 'POST_STATUS.CLOSED',
   IN_PROGRESS: 'POST_STATUS.IN_PROGRESS',
-  COMPLETED:   'POST_STATUS.COMPLETED'
+  COMPLETED: 'POST_STATUS.COMPLETED'
 } as const;
 
 export type PostStatus = typeof POST_STATUS_CODES[keyof typeof POST_STATUS_CODES];
@@ -98,9 +98,9 @@ export type PostStatus = typeof POST_STATUS_CODES[keyof typeof POST_STATUS_CODES
 // APPLICATION STATUS
 // ─────────────────────────────────────────────────────────────
 export const APPLICATION_STATUS_CODES = {
-  PENDING:   'APPLICATION_STATUS.PENDING',
-  ACCEPTED:  'APPLICATION_STATUS.ACCEPTED',
-  REJECTED:  'APPLICATION_STATUS.REJECTED',
+  PENDING: 'APPLICATION_STATUS.PENDING',
+  ACCEPTED: 'APPLICATION_STATUS.ACCEPTED',
+  REJECTED: 'APPLICATION_STATUS.REJECTED',
   WITHDRAWN: 'APPLICATION_STATUS.WITHDRAWN'
 } as const;
 
@@ -109,9 +109,9 @@ export type ApplicationStatus = typeof APPLICATION_STATUS_CODES[keyof typeof APP
 /** Maps an application status code → human label */
 export function getLabelForApplicationStatus(code: string | undefined, fallback = '—'): string {
   const map: Record<string, string> = {
-    [APPLICATION_STATUS_CODES.PENDING]:   'Pending',
-    [APPLICATION_STATUS_CODES.ACCEPTED]:  'Accepted',
-    [APPLICATION_STATUS_CODES.REJECTED]:  'Rejected',
+    [APPLICATION_STATUS_CODES.PENDING]: 'Pending',
+    [APPLICATION_STATUS_CODES.ACCEPTED]: 'Accepted',
+    [APPLICATION_STATUS_CODES.REJECTED]: 'Rejected',
     [APPLICATION_STATUS_CODES.WITHDRAWN]: 'Withdrawn'
   };
   return code ? (map[code] ?? code) : fallback;
@@ -121,16 +121,16 @@ export function getLabelForApplicationStatus(code: string | undefined, fallback 
 // ROUTES
 // ─────────────────────────────────────────────────────────────
 export const APP_ROUTES = {
-  SPLASH:             '/splash',
-  LOGIN:              '/login',
-  SIGNUP:             '/signup',
-  ONBOARDING:         '/tabs/onboarding',
-  HOME:               '/tabs/home',
-  POST:               '/tabs/post',
-  PROFILE:            '/tabs/profile',
-  CHAT:               '/tabs/chat',
-  APPLICATIONS:       '/tabs/applications',
-  POST_DETAIL:        '/tabs/post-detail',
+  SPLASH: '/splash',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  ONBOARDING: '/tabs/onboarding',
+  HOME: '/tabs/home',
+  POST: '/tabs/post',
+  PROFILE: '/tabs/profile',
+  CHAT: '/tabs/chat',
+  APPLICATIONS: '/tabs/applications',
+  POST_DETAIL: '/tabs/post-detail',
   APPLICATION_DETAIL: '/tabs/application-detail'
 } as const;
 
@@ -161,7 +161,7 @@ export function getLabelForCity(code: string | undefined, fallback = 'Remote'): 
 export function getLabelForRole(code: string | undefined, fallback = '—'): string {
   if (!code) return fallback;
   const systemLabels: Record<string, string> = {
-    [ROLE_CODES.ADMIN]:      'Admin',
+    [ROLE_CODES.ADMIN]: 'Admin',
     [ROLE_CODES.UNASSIGNED]: 'Unassigned'
   };
   return systemLabels[code] ?? ROLES.find(r => r.code === code)?.label ?? code;
@@ -176,7 +176,7 @@ export function getLabelForSubtype(code: string | undefined, fallback = '—'): 
 /** Maps a user status code → human label. e.g. 'USER_STATUS.ACTIVE' → 'Active' */
 export function getLabelForUserStatus(code: string | undefined, fallback = '—'): string {
   const map: Record<string, string> = {
-    [USER_STATUS_CODES.ACTIVE]:  'Active',
+    [USER_STATUS_CODES.ACTIVE]: 'Active',
     [USER_STATUS_CODES.BLOCKED]: 'Blocked',
     [USER_STATUS_CODES.DELETED]: 'Deleted'
   };
@@ -186,10 +186,10 @@ export function getLabelForUserStatus(code: string | undefined, fallback = '—'
 /** Maps a post status code → human label. e.g. 'POST_STATUS.OPEN' → 'Open' */
 export function getLabelForPostStatus(code: string | undefined, fallback = '—'): string {
   const map: Record<string, string> = {
-    [POST_STATUS_CODES.OPEN]:        'Open',
-    [POST_STATUS_CODES.CLOSED]:      'Closed',
+    [POST_STATUS_CODES.OPEN]: 'Open',
+    [POST_STATUS_CODES.CLOSED]: 'Closed',
     [POST_STATUS_CODES.IN_PROGRESS]: 'In Progress',
-    [POST_STATUS_CODES.COMPLETED]:   'Completed'
+    [POST_STATUS_CODES.COMPLETED]: 'Completed'
   };
   return code ? (map[code] ?? code) : fallback;
 }

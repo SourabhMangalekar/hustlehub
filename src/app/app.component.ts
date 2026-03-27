@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { APP_CONTEXT } from './core/master-data';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'hustlehub';
+  constructor() {
+    document.body.classList.add(`theme-${APP_CONTEXT.toLowerCase()}`);
+  }
 }

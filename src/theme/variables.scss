@@ -45,3 +45,35 @@
     --app-text-main: #ffffff;
   }
 }
+
+// =====================================================================
+// MULTI-TENANT THEME OVERRIDES
+// These respond dynamically to the document.body "theme-{tenantId}" class
+// =====================================================================
+
+body.theme-hustle_hub_2 {
+  /** Primary: Vibrant Blue **/
+  --ion-color-primary: #007aff;
+  --ion-color-primary-rgb: 0, 122, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #006ce0;
+  --ion-color-primary-tint: #1a87ff;
+
+  /** Gradient Secondary: Cyber Purple **/
+  --app-gradient-secondary: #aa00ff;
+
+  /** Backgrounds: Deep Midnight Blue **/
+  --app-background: #060913;
+  --app-background-gradient-start: #111a30;
+
+  /** Glass & Overlays (Light backgrounds on dark) **/
+  --app-glass-bg: rgba(255, 255, 255, 0.04);
+  --app-glass-bg-alt: rgba(255, 255, 255, 0.02);
+  --app-border-color: rgba(255, 255, 255, 0.12);
+  --app-border-color-alt: rgba(255, 255, 255, 0.06);
+
+  /** Shadows / Glows **/
+  --app-glow-primary: rgba(0, 122, 255, 0.4);
+  --app-glow-primary-soft: rgba(0, 122, 255, 0.2);
+}
