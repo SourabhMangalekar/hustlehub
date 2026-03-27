@@ -1,0 +1,202 @@
+<ion-content class="onboarding-content">
+  <div class="onboarding-container">
+
+    <!-- Header -->
+    <div class="onboarding-header">
+      <div class="logo-badge">
+        <ion-icon name="flash-outline"></ion-icon>
+      </div>
+      <h1 class="onboarding-title">Welcome to <span class="highlight">HustleHub</span></h1>
+      <p class="onboarding-subtitle">Let's set up your profile</p>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-dot" [class.active]="step >= 1"></div>
+      <div class="step-line" [class.active]="step >= 2"></div>
+      <div class="step-dot" [class.active]="step >= 2"></div>
+      <div class="step-line" [class.active]="step >= 3"></div>
+      <div class="step-dot" [class.active]="step >= 3"></div>
+      <div class="step-line" [class.active]="step >= 4"></div>
+      <div class="step-dot" [class.active]="step >= 4"></div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- STEP 1: Choose Role      -->
+    <!-- ======================== -->
+    <div class="step-content" *ngIf="step === 1">
+      <h2 class="step-title">What are you here for?</h2>
+
+      <div class="role-cards">
+        <div class="role-card" (click)="selectRole(ROLE_CODES.DEMAND)">
+          <div class="role-icon-wrap demand">
+            <ion-icon name="search-outline"></ion-icon>
+          </div>
+          <div class="role-card-text">
+            <h3>Find Talent</h3>
+            <p>I'm a Business or Brand looking to collaborate with influencers &amp; creators</p>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+        </div>
+
+        <div class="role-card" (click)="selectRole(ROLE_CODES.SUPPLY)">
+          <div class="role-icon-wrap supply">
+            <ion-icon name="star-outline"></ion-icon>
+          </div>
+          <div class="role-card-text">
+            <h3>Offer Services</h3>
+            <p>I'm a Creator, Photographer or Freelancer looking for opportunities</p>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- STEP 2: Choose Subtype   -->
+    <!-- ======================== -->
+    <div class="step-content" *ngIf="step === 2">
+      <button class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon> Back
+      </button>
+      <h2 class="step-title">Which describes you best?</h2>
+
+      <div class="chip-grid">
+        <div class="subtype-chip" *ngFor="let opt of subtypeOptions" (click)="selectSubtype(opt.value)">
+          {{ opt.label }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- STEP 3: Meta Info        -->
+    <!-- ======================== -->
+    <div class="step-content meta-step" *ngIf="step === 3">
+      <button class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon> Back
+      </button>
+      <h2 class="step-title">Tell us more about yourself</h2>
+      <p class="step-subtitle">Only fill what applies. You can update this later.</p>
+
+      <!-- Common fields -->
+      <div class="meta-form">
+        <div class="meta-group">
+          <ion-label class="meta-label">Your City</ion-label>
+          <ion-item lines="none" class="meta-input">
+            <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
+            <ion-select placeholder="Select city" [(ngModel)]="meta.city" interface="action-sheet">
+              <ion-select-option *ngFor="let city of CITIES" [value]="city.code">
+                {{ city.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="meta-group">
+          <ion-label class="meta-label">Short Bio</ion-label>
+          <ion-item lines="none" class="meta-input">
+            <ion-textarea rows="3" placeholder="Tell others what you do..." [(ngModel)]="meta.bio"></ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Business fields -->
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.BUSINESS">
+          <div class="meta-group">
+            <ion-label class="meta-label">Company Name</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="briefcase-outline" slot="start" color="medium"></ion-icon>
+              <ion-input placeholder="Your company or brand name" [(ngModel)]="meta.companyName"></ion-input>
+            </ion-item>
+          </div>
+        </ng-container>
+
+        <!-- Bride fields -->
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.BRIDE">
+          <div class="meta-group">
+            <ion-label class="meta-label">Wedding Date</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="calendar-outline" slot="start" color="medium"></ion-icon>
+              <ion-input type="date" [(ngModel)]="meta.weddingDate"></ion-input>
+            </ion-item>
+          </div>
+        </ng-container>
+
+        <!-- Influencer fields -->
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.INFLUENCER">
+          <div class="meta-group">
+            <ion-label class="meta-label">Instagram Handle</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="logo-instagram" slot="start" color="medium"></ion-icon>
+              <ion-input placeholder="@yourhandle" [(ngModel)]="meta.instagramHandle"></ion-input>
+            </ion-item>
+          </div>
+          <div class="meta-group">
+            <ion-label class="meta-label">Instagram Followers</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="people-outline" slot="start" color="medium"></ion-icon>
+              <ion-input type="number" placeholder="e.g. 50000" [(ngModel)]="meta.followers"></ion-input>
+            </ion-item>
+          </div>
+          <div class="meta-group">
+            <ion-label class="meta-label">YouTube Channel (optional)</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="logo-youtube" slot="start" color="medium"></ion-icon>
+              <ion-input placeholder="Channel URL" [(ngModel)]="meta.youtube"></ion-input>
+            </ion-item>
+          </div>
+        </ng-container>
+
+        <!-- Photographer & Freelancer fields -->
+        <ng-container *ngIf="selectedSubtype === SUBTYPE_CODES.PHOTOGRAPHER || selectedSubtype === SUBTYPE_CODES.FREELANCER">
+          <div class="meta-group">
+            <ion-label class="meta-label">Years of Experience</ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-icon name="time-outline" slot="start" color="medium"></ion-icon>
+              <ion-input type="number" placeholder="e.g. 3" [(ngModel)]="meta.experienceYears"></ion-input>
+            </ion-item>
+          </div>
+          <div class="meta-group">
+            <ion-label class="meta-label">Skills <span class="hint">(comma separated)</span></ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-input placeholder="e.g. Portrait, Events, Editing" [(ngModel)]="meta.skills"></ion-input>
+            </ion-item>
+          </div>
+          <div class="meta-group" *ngIf="selectedSubtype === SUBTYPE_CODES.PHOTOGRAPHER">
+            <ion-label class="meta-label">Equipment <span class="hint">(comma separated)</span></ion-label>
+            <ion-item lines="none" class="meta-input">
+              <ion-input placeholder="e.g. Canon 5D, DJI Drone" [(ngModel)]="meta.equipment"></ion-input>
+            </ion-item>
+          </div>
+        </ng-container>
+      </div>
+
+      <ion-button expand="block" class="next-btn" (click)="goToConfirm()">
+        Continue
+        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- ======================== -->
+    <!-- STEP 4: Confirm          -->
+    <!-- ======================== -->
+    <div class="step-content confirm-step" *ngIf="step === 4">
+      <div class="confirm-icon">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </div>
+      <h2 class="step-title">You're all set!</h2>
+      <p class="confirm-desc">
+        <strong>{{ selectedSubtypeLabel }}</strong> profile saved.<br>
+        You can update your details anytime from your Profile.
+      </p>
+      <ion-button expand="block" class="confirm-btn" [disabled]="isSaving" (click)="finishOnboarding()">
+        <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+        <span *ngIf="!isSaving">Enter HustleHub 🚀</span>
+      </ion-button>
+      <button class="back-btn center" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon> Go back
+      </button>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>

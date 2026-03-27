@@ -1,0 +1,62 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <div class="header-content">
+      <h1 class="header-title">Create Collab</h1>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="post-content" scroll-y="true">
+  <div class="form-container">
+    <p class="form-subtitle">Looking for an influencer or freelancer? Post your requirements here to match with the highest quality candidates.</p>
+    
+    <form [formGroup]="postForm" (ngSubmit)="onPost()" class="post-form">
+      <div class="input-group">
+        <ion-label class="custom-label">Project Title</ion-label>
+        <ion-item lines="none" class="custom-input">
+          <ion-input type="text" placeholder="e.g. Need a Food Blogger for cafe" formControlName="title"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <ion-label class="custom-label">Project Details</ion-label>
+        <ion-item lines="none" class="custom-input textarea-item">
+          <ion-textarea rows="5" placeholder="Describe the scope of work..." formControlName="description"></ion-textarea>
+        </ion-item>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group half-width">
+          <ion-label class="custom-label">Budget ($)</ion-label>
+          <ion-item lines="none" class="custom-input">
+            <ion-icon name="cash-outline" slot="start" color="medium"></ion-icon>
+            <ion-input type="text" placeholder="500 or 15/hr" formControlName="budget"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="input-group half-width">
+          <ion-label class="custom-label">Location</ion-label>
+          <ion-item lines="none" class="custom-input city-select-item">
+            <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
+            <ion-select
+              formControlName="city"
+              interface="action-sheet"
+              placeholder="Select city"
+              class="city-select">
+              <ion-select-option *ngFor="let city of CITIES" [value]="city.code">
+                {{ city.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+
+      <ion-button expand="block" type="submit" class="submit-btn" [disabled]="postForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Post Requirement</span>
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+      </ion-button>
+    </form>
+    
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>

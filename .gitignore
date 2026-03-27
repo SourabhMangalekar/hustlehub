@@ -37,6 +37,9 @@ yarn-error.log
 testem.log
 /typings
 
+# Android local config (machine-specific)
+android/local.properties
+
 # System files
 .DS_Store
 Thumbs.db

@@ -1,0 +1,114 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Post Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="post-detail-content" scroll-y="true">
+  <div class="loader-state" *ngIf="isLoading()">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
+
+  <div class="content-wrapper" *ngIf="!isLoading() && post()">
+    <!-- Header Section -->
+    <div class="detail-card main-card">
+      <div class="card-badges">
+        <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post()?.profile?.city) }}</ion-badge>
+        <ion-badge [color]="getPostStatus() === POST_STATUS_CODES.OPEN ? 'success' : 'medium'" class="status-badge">
+          {{ getLabelForPostStatus(getPostStatus()) }}
+        </ion-badge>
+      </div>
+
+      <h1 class="post-title">{{ post()?.profile?.title }}</h1>
+
+      <div class="stats-row">
+        <div class="budget">
+          <ion-icon name="cash-outline"></ion-icon>
+          <span>{{ post()?.profile?.budget }}</span>
+        </div>
+        <div class="applicant-count">
+          <ion-icon name="people-outline"></ion-icon>
+          <span>{{ post()?.stats?.applicationCount }} applicants</span>
+        </div>
+      </div>
+
+      <!-- Detail Properties -->
+      <div class="properties-grid">
+        <div class="prop-item" *ngIf="post()?.profile?.roleSubtypeRequired">
+          <span class="prop-label">Looking For</span>
+          <span class="prop-value">{{ getLabelForSubtype(post()?.profile?.roleSubtypeRequired) }}</span>
+        </div>
+        <div class="prop-item" *ngIf="post()?.meta?.platform">
+          <span class="prop-label">Platform</span>
+          <span class="prop-value">{{ post()?.meta?.platform }}</span>
+        </div>
+        <div class="prop-item" *ngIf="post()?.meta?.eventDate">
+          <span class="prop-label">Event Date</span>
+          <span class="prop-value">{{ post()?.meta?.eventDate | date:'mediumDate' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="detail-card desc-card">
+      <h3 class="section-title">Description</h3>
+      <p class="description-text">{{ post()?.profile?.description }}</p>
+    </div>
+
+    <div class="detail-card deliverables-card" *ngIf="post()?.meta?.deliverables">
+      <h3 class="section-title">Deliverables</h3>
+      <p class="description-text">{{ post()?.meta?.deliverables }}</p>
+    </div>
+
+    <!-- Bottom Spacer so content scrolls fully above sticky footer -->
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- STICKY ACTION FOOTER (Internal to ion-content so tabs don't overlap) -->
+  <div class="sticky-action-footer" *ngIf="!isLoading() && post()">
+    <!-- POST OWNER CONTROLS -->
+    <ng-container *ngIf="isPostOwner()">
+      <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN"
+                  (click)="viewApplications()">
+        View Applications ({{ post()?.stats?.applicationCount }})
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="success" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.IN_PROGRESS"
+                  (click)="markAsCompleted()">
+        Mark as Completed
+      </ion-button>
+      
+      <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.COMPLETED">
+        Completed
+      </ion-button>
+    </ng-container>
+
+    <!-- SUPPLY USER CONTROLS -->
+    <ng-container *ngIf="!isPostOwner() && (currentUserRole() === ROLE_CODES.SUPPLY || currentUserRole() === ROLE_CODES.UNASSIGNED)">
+      <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN && !hasApplied()"
+                  (click)="applyForJob()">
+        Apply Now
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="success" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.OPEN && hasApplied()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Applied
+      </ion-button>
+      
+      <ion-button expand="block" shape="round" color="medium" class="main-action-btn" disabled
+                  *ngIf="getPostStatus() === POST_STATUS_CODES.IN_PROGRESS">
+        In Progress
+      </ion-button>
+    </ng-container>
+  </div>
+</ion-content>

@@ -1,11 +1,27 @@
 <ion-app>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>HustleHub</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-split-pane contentId="main-content">
 
-  <ion-content class="ion-padding">
-    App Started Successfully
-  </ion-content>
+    <!-- Sidebar -->
+    <!-- <ion-menu contentId="main-content" type="overlay">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>HustleHub</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-item routerLink="/home">Home</ion-item>
+          <ion-item routerLink="/post">Post</ion-item>
+          <ion-item routerLink="/applications">Applications</ion-item>
+          <ion-item routerLink="/chat">Chat</ion-item>
+          <ion-item routerLink="/profile">Profile</ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu> -->
+
+    <!-- Main Content -->
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+
+  </ion-split-pane>
 </ion-app>

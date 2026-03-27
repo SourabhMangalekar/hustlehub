@@ -1,0 +1,47 @@
+// Ionic Variables and Custom App Theme Overrides
+// ----------------------------------------------------------------------------
+
+:root {
+  /** Primary **/
+  --ion-color-primary: #ff3b30;
+  --ion-color-primary-rgb: 255, 59, 48;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e0342a;
+  --ion-color-primary-tint: #ff4f45;
+
+  /** Gradient Secondary for our Buttons **/
+  --app-gradient-secondary: #ff6b22;
+
+  /** Backgrounds **/
+  --app-background: #090a0f;
+  --app-background-gradient-start: #1b2735;
+
+  /** Glass & Overlays (Light backgrounds on dark) **/
+  --app-glass-bg: rgba(255, 255, 255, 0.05);
+  --app-glass-bg-alt: rgba(255, 255, 255, 0.03);
+  --app-border-color: rgba(255, 255, 255, 0.1);
+  --app-border-color-alt: rgba(255, 255, 255, 0.05);
+
+  /** Shadows / Glows **/
+  --app-glow-primary: rgba(255, 59, 48, 0.4);
+  --app-glow-primary-soft: rgba(255, 59, 48, 0.2);
+
+  /** Text Colors **/
+  --app-text-main: #ffffff;
+  --app-text-secondary: #a0a0a0;
+  --app-text-tertiary: #8c8c8c;
+
+  /** Status Colors **/
+  --app-color-success: #34c759;
+  --app-color-danger: #ff4961;
+}
+
+// Ensure the default dark preference applies correctly
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Override later if necessary when testing bright vs dark. For now, it matches our premium dark theme natively.
+    --app-background: #090a0f;
+    --app-text-main: #ffffff;
+  }
+}

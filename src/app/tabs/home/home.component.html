@@ -1,0 +1,158 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <div class="header-content">
+      <div class="user-greeting">
+        <p class="greeting-text">Hello, Hustler 👋</p>
+        <h1 class="header-title">Discover</h1>
+      </div>
+      <ion-avatar class="header-avatar" routerLink="/tabs/profile">
+        <img src="https://i.pravatar.cc/150?img=68" />
+      </ion-avatar>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-content" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="feed-container">
+
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <ion-searchbar mode="ios" placeholder="Search for opportunities..." class="custom-searchbar"></ion-searchbar>
+    </div>
+
+    <!-- ALL | MY POSTS Segment -->
+    <div class="segment-wrapper">
+      <ion-segment [value]="activeTab()" mode="ios" class="feed-segment" (ionChange)="switchTab($any($event.detail.value))">
+        <ion-segment-button value="all" class="segment-btn">
+          <ion-label>All Posts</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="my" class="segment-btn">
+          <ion-label>{{ userRole() === ROLE_CODES.SUPPLY ? 'My Applications' : 'My Posts' }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- ALL POSTS TAB                  -->
+    <!-- ═══════════════════════════════ -->
+    <ng-container *ngIf="activeTab() === 'all'">
+      <h2 class="section-heading">Open Opportunities</h2>
+
+      <div class="cards-list">
+        <div class="loader-state" *ngIf="isLoading()">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </div>
+
+        <div class="empty-state" *ngIf="!isLoading() && posts().length === 0">
+          <ion-icon name="search-outline" class="empty-icon"></ion-icon>
+          <p>No collaborations found yet!</p>
+        </div>
+
+        <div class="requirement-card" *ngFor="let post of posts()" (click)="goToPost(post)">
+          <div class="card-header">
+            <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity(post.profile.city) }}</ion-badge>
+            <span class="applicant-count" *ngIf="post.stats.applicationCount > 0">
+              <ion-icon name="people-outline"></ion-icon>
+              {{ post.stats.applicationCount }}
+            </span>
+          </div>
+          <h3 class="card-title">{{ post.profile.title }}</h3>
+          <p class="card-desc">{{ post.profile.description }}</p>
+          <div class="card-footer">
+            <div class="budget">
+              <ion-icon name="cash-outline"></ion-icon>
+              <span>{{ post.profile.budget }}</span>
+            </div>
+            <div class="card-arrow">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- MY TAB                         -->
+    <!-- ═══════════════════════════════ -->
+    <ng-container *ngIf="activeTab() === 'my'">
+      <h2 class="section-heading">
+        {{ userRole() === ROLE_CODES.SUPPLY ? 'My Applications' : 'My Posts' }}
+      </h2>
+
+      <div class="cards-list">
+        <div class="loader-state" *ngIf="isLoading()">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </div>
+
+        <div class="empty-state" *ngIf="!isLoading() && myItems().length === 0">
+          <ion-icon name="document-outline" class="empty-icon"></ion-icon>
+          <p>Nothing here yet.</p>
+        </div>
+
+        <!-- MY POSTS (demand / unassigned user) -->
+        <ng-container *ngIf="userRole() !== ROLE_CODES.SUPPLY">
+          <div class="requirement-card" *ngFor="let item of myItems()" (click)="goToPost($any(item))">
+            <div class="card-header">
+              <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity($any(item).profile.city) }}</ion-badge>
+              <ion-badge [color]="$any(item).system?.status === 'POST_STATUS.OPEN' ? 'success' : 'medium'" class="status-badge">
+                {{ getLabelForPostStatus($any(item).system?.status) }}
+              </ion-badge>
+            </div>
+            <h3 class="card-title">{{ $any(item).profile.title }}</h3>
+            <p class="card-desc">{{ $any(item).profile.description }}</p>
+            <div class="card-footer">
+              <div class="budget">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>{{ $any(item).profile.budget }}</span>
+              </div>
+              <span class="applicant-count" *ngIf="$any(item).stats?.applicationCount > 0">
+                <ion-icon name="people-outline"></ion-icon>
+                {{ $any(item).stats.applicationCount }} applied
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- MY APPLICATIONS (supply user) -->
+        <ng-container *ngIf="userRole() === ROLE_CODES.SUPPLY">
+          <div class="requirement-card application-card" *ngFor="let item of myItems()" (click)="goToApplicationPost($any(item))">
+            <div class="card-header">
+              <ion-badge color="primary" class="category-badge app-status"
+                [class.pending]="$any(item).system?.status === 'APPLICATION_STATUS.PENDING'"
+                [class.accepted]="$any(item).system?.status === 'APPLICATION_STATUS.ACCEPTED'"
+                [class.rejected]="$any(item).system?.status === 'APPLICATION_STATUS.REJECTED'">
+                {{ $any(item).system?.status | titlecase }}
+              </ion-badge>
+            </div>
+            <h3 class="card-title">{{ $any(item).profile.postTitle }}</h3>
+            <p class="card-desc" *ngIf="$any(item).profile.message">{{ $any(item).profile.message }}</p>
+            <div class="card-footer">
+              <div class="budget" *ngIf="$any(item).profile.priceQuoted">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>Quoted: {{ $any(item).profile.priceQuoted }}</span>
+              </div>
+              <div class="card-arrow">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <!-- LOAD MORE -->
+    <div class="load-more-wrapper" *ngIf="hasMore()">
+      <ion-button fill="outline" expand="block" class="load-more-btn"
+        (click)="loadMore()" [disabled]="isLoadingMore()">
+        <ion-spinner *ngIf="isLoadingMore()" name="crescent" slot="start"></ion-spinner>
+        {{ isLoadingMore() ? 'Loading...' : 'Load More' }}
+      </ion-button>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>

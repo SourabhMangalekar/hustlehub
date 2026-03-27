@@ -1,0 +1,161 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar" mode="ios">
+    <ion-buttons slot="start" *ngIf="viewMode() === 'forPost'">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title *ngIf="viewMode() === 'forPost'">Applicants</ion-title>
+    <ion-title *ngIf="viewMode() === 'myApplications'">My Applications</ion-title>
+    <ion-title *ngIf="viewMode() === 'ownerGlobal'">All Applicants</ion-title>
+
+    <!-- Avatar if not forPost view -->
+    <ion-buttons slot="end" *ngIf="viewMode() !== 'forPost'">
+      <ion-avatar class="header-avatar" routerLink="/tabs/profile">
+        <img src="https://i.pravatar.cc/150?img=68" />
+      </ion-avatar>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="applications-content" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="list-container">
+
+    <div class="loader-state" *ngIf="isLoading()">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading() && applications().length === 0">
+      <ion-icon name="document-text-outline" class="empty-icon"></ion-icon>
+      <p *ngIf="viewMode() === 'forPost'">No applicants yet.</p>
+      <p *ngIf="viewMode() === 'myApplications'">You haven't applied to any posts yet.</p>
+      <p *ngIf="viewMode() === 'ownerGlobal'">You haven't received any applications across your posts yet.</p>
+    </div>
+
+    <!-- FLAT LIST (forPost or myApplications) -->
+    <div class="cards-list" *ngIf="viewMode() !== 'ownerGlobal'">
+      <div class="application-card" *ngFor="let app of applications()" (click)="viewApplicationDetail(app)">
+        
+        <div class="card-header">
+          <!-- Demand view: See Applicant Subtype -->
+          <!-- Supply view: See Post Title -->
+          <h3 class="card-title">
+            {{ viewMode() === 'forPost' ? app.profile.applicantSnapshot.name : app.profile.postTitle }}
+          </h3>
+          <ion-badge class="status-badge"
+            [color]="app.system.status === 'APPLICATION_STATUS.PENDING' ? 'warning' :
+                     app.system.status === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
+            {{ getLabelForApplicationStatus(app.system.status) }}
+          </ion-badge>
+        </div>
+
+        <div class="applicant-row" *ngIf="viewMode() === 'forPost'">
+          <ion-avatar class="applicant-avatar">
+            <img [src]="app.profile.applicantSnapshot.profileImage || 'https://i.pravatar.cc/150'" />
+          </ion-avatar>
+          <div class="applicant-info">
+            <span class="subtype">{{ getLabelForSubtype(app.profile.applicantSnapshot.roleSubtype) }}</span>
+            <span class="city"><ion-icon name="location-outline"></ion-icon> {{ getLabelForCity(app.profile.applicantSnapshot.city) }}</span>
+          </div>
+          <div class="rating-info" *ngIf="app.profile.applicantSnapshot.rating > 0">
+            <ion-icon name="star"></ion-icon>
+            <span>{{ app.profile.applicantSnapshot.rating }}</span>
+          </div>
+        </div>
+
+        <p class="message-preview" *ngIf="app.profile.message">
+          "{{ app.profile.message }}"
+        </p>
+
+        <div class="card-footer">
+          <div class="price" *ngIf="app.profile.priceQuoted">
+            <ion-icon name="cash-outline"></ion-icon>
+            <span>Quoted: {{ app.profile.priceQuoted }}</span>
+          </div>
+          <span *ngIf="!app.profile.priceQuoted"></span> <!-- Spacer -->
+          <div class="card-arrow">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HIERARCHY ACCORDION (ownerGlobal) -->
+    <div class="accordion-container" *ngIf="viewMode() === 'ownerGlobal' && groupedApplications().length > 0">
+      <ion-accordion-group multiple="true" [value]="[groupedApplications()[0].postId]">
+        
+        <ion-accordion [value]="group.postId" *ngFor="let group of groupedApplications()">
+          <!-- ACCORDION HEADER -->
+          <ion-item slot="header" class="accordion-header" lines="none">
+            <ion-label>
+              <h2><b>{{ group.postTitle }}</b></h2>
+              <p>{{ group.applications.length }} Applicant(s)</p>
+            </ion-label>
+          </ion-item>
+          
+          <!-- ACCORDION CONTENT -->
+          <div class="accordion-content-wrapper" slot="content">
+            <div class="application-card inner-card" *ngFor="let app of group.applications" (click)="viewApplicationDetail(app)">
+              
+              <div class="card-header">
+                <h3 class="card-title">{{ app.profile.applicantSnapshot.name }}</h3>
+                <ion-badge class="status-badge"
+                  [color]="app.system.status === 'APPLICATION_STATUS.PENDING' ? 'warning' :
+                           app.system.status === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
+                  {{ getLabelForApplicationStatus(app.system.status) }}
+                </ion-badge>
+              </div>
+
+              <div class="applicant-row">
+                <ion-avatar class="applicant-avatar">
+                  <img [src]="app.profile.applicantSnapshot.profileImage || 'https://i.pravatar.cc/150'" />
+                </ion-avatar>
+                <div class="applicant-info">
+                  <span class="subtype">{{ getLabelForSubtype(app.profile.applicantSnapshot.roleSubtype) }}</span>
+                  <span class="city"><ion-icon name="location-outline"></ion-icon> {{ getLabelForCity(app.profile.applicantSnapshot.city) }}</span>
+                </div>
+                <div class="rating-info" *ngIf="app.profile.applicantSnapshot.rating > 0">
+                  <ion-icon name="star"></ion-icon>
+                  <span>{{ app.profile.applicantSnapshot.rating }}</span>
+                </div>
+              </div>
+
+              <p class="message-preview" *ngIf="app.profile.message">
+                "{{ app.profile.message }}"
+              </p>
+
+              <div class="card-footer">
+                <div class="price" *ngIf="app.profile.priceQuoted">
+                  <ion-icon name="cash-outline"></ion-icon>
+                  <span>Quoted: {{ app.profile.priceQuoted }}</span>
+                </div>
+                <span *ngIf="!app.profile.priceQuoted"></span> <!-- Spacer -->
+                <div class="card-arrow">
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ion-accordion>
+
+      </ion-accordion-group>
+    </div>
+
+    <!-- LOAD MORE -->
+    <div class="load-more-wrapper" *ngIf="hasMore()">
+      <ion-button fill="outline" expand="block" class="load-more-btn"
+        (click)="loadMore()" [disabled]="isLoadingMore()">
+        <ion-spinner *ngIf="isLoadingMore()" name="crescent" slot="start"></ion-spinner>
+        {{ isLoadingMore() ? 'Loading...' : 'Load More' }}
+      </ion-button>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>
