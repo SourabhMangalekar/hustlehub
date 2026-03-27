@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseService, Application, PageCursor, PaginatedResult } from '../../services/database.service';
 import { AuthService } from '../../services/auth.service';
@@ -28,8 +28,23 @@ export class ApplicationsComponent implements OnInit {
   private nextCursor: PageCursor | null = null;
 
   // View modes
-  public isPostOwnerView = signal<boolean>(false);
+  public viewMode = signal<'forPost' | 'myApplications' | 'ownerGlobal'>('myApplications');
   public postId = signal<string | null>(null);
+
+  // Grouped computed signal for ownerGlobal mode
+  public groupedApplications = computed(() => {
+    const apps = this.applications();
+    const groups = new Map<string, { postId: string, postTitle: string, applications: Application[] }>();
+    
+    for (const app of apps) {
+      const pId = app.profile.postId;
+      if (!groups.has(pId)) {
+        groups.set(pId, { postId: pId, postTitle: app.profile.postTitle, applications: [] });
+      }
+      groups.get(pId)!.applications.push(app);
+    }
+    return Array.from(groups.values());
+  });
 
   // Expose label helpers
   readonly getLabelForCity = getLabelForCity;
@@ -37,14 +52,20 @@ export class ApplicationsComponent implements OnInit {
   readonly getLabelForApplicationStatus = getLabelForApplicationStatus;
 
   async ngOnInit() {
-    // Route can either be /tabs/applications (my applications) 
-    // or /tabs/applications/:postId (post owner viewing applicants)
     const pId = this.route.snapshot.paramMap.get('postId');
-    if (pId) {
-      this.postId.set(pId);
-      this.isPostOwnerView.set(true);
-    } else {
-      this.isPostOwnerView.set(false);
+    
+    // Determine view mode before loading
+    const user = this.auth.currentUser();
+    if (user) {
+      const profile = await this.db.getUserProfile(user.uid);
+      if (pId) {
+        this.postId.set(pId);
+        this.viewMode.set('forPost');
+      } else if (profile?.system?.role === ROLE_CODES.DEMAND) {
+        this.viewMode.set('ownerGlobal');
+      } else {
+        this.viewMode.set('myApplications');
+      }
     }
 
     await this.loadApplications();
@@ -68,10 +89,14 @@ export class ApplicationsComponent implements OnInit {
 
       let result: PaginatedResult<Application>;
 
-      if (this.isPostOwnerView()) {
+      const mode = this.viewMode();
+
+      if (mode === 'forPost') {
         const pId = this.postId();
         if (!pId) return;
         result = await this.db.getApplicationsForPost(pId, this.nextCursor);
+      } else if (mode === 'ownerGlobal') {
+        result = await this.db.getApplicationsForOwner(user.uid, this.nextCursor);
       } else {
         result = await this.db.getMyApplications(user.uid, this.nextCursor);
       }
@@ -100,7 +125,7 @@ export class ApplicationsComponent implements OnInit {
   }
 
   goBack() {
-    if (this.isPostOwnerView()) {
+    if (this.viewMode() === 'forPost') {
       this.router.navigate([APP_ROUTES.POST_DETAIL, this.postId()]);
     } else {
       this.router.navigate([APP_ROUTES.HOME]);

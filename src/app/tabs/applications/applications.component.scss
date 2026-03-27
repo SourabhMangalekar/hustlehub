@@ -192,3 +192,78 @@
 .bottom-spacer {
   height: 100px;
 }
+
+/* ==================================== */
+/* PREMIUM ACCORDION STYLING            */
+/* ==================================== */
+
+.accordion-container {
+  padding: 0 0 20px 0;
+}
+
+ion-accordion-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+ion-accordion {
+  background: var(--app-glass-bg);
+  border-radius: 20px;
+  border: 1px solid var(--app-border-color-alt);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+  .accordion-header {
+    --background: transparent;
+    --border-width: 0;
+    --padding-start: 18px;
+    --padding-end: 18px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--app-text-main);
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: var(--app-text-secondary);
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  /* When accordion is expanded, add a subtle border below header */
+  &.accordion-expanded .accordion-header {
+    border-bottom: 1px dashed var(--app-border-color);
+  }
+}
+
+.accordion-content-wrapper {
+  background: transparent;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.application-card.inner-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--app-background);
+  border: 1px solid var(--app-border-color);
+  box-shadow: none;
+  backdrop-filter: none;
+  margin-bottom: 0;
+  
+  .card-title {
+    font-size: 1.05rem;
+  }
+}

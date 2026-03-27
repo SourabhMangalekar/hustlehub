@@ -151,6 +151,7 @@ export interface Application {
   profile: {
     postId: string;
     postTitle: string;
+    postOwnerId: string;
     applicantId: string;
     applicantSnapshot: ApplicantSnapshot;
     message?: string;
@@ -379,6 +380,7 @@ export class DatabaseService {
       profile: {
         postId,
         postTitle,
+        postOwnerId,
         applicantId,
         applicantSnapshot,
         ...(message && { message }),
@@ -429,6 +431,20 @@ export class DatabaseService {
     const ref = collection(this.db, this.getTenantPath('applications'));
     const constraints: any[] = [
       where('profile.postId', '==', postId),
+      limit(PAGE_SIZE)
+    ];
+    if (cursor) constraints.push(startAfter(cursor));
+    const snap = await getDocs(query(ref, ...constraints));
+    return {
+      items: snap.docs.map(d => ({ id: d.id, ...d.data() } as Application)),
+      nextCursor: snap.docs.length === PAGE_SIZE ? snap.docs[snap.docs.length - 1] as PageCursor : null
+    };
+  }
+
+  async getApplicationsForOwner(ownerId: string, cursor?: PageCursor | null): Promise<PaginatedResult<Application>> {
+    const ref = collection(this.db, this.getTenantPath('applications'));
+    const constraints: any[] = [
+      where('profile.postOwnerId', '==', ownerId),
       limit(PAGE_SIZE)
     ];
     if (cursor) constraints.push(startAfter(cursor));
