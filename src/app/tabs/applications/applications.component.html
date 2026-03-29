@@ -48,8 +48,8 @@
             {{ viewMode() === 'forPost' ? app.profile.applicantSnapshot.name : app.profile.postTitle }}
           </h3>
           <ion-badge class="status-badge"
-            [color]="app.system.status === 'APPLICATION_STATUS.PENDING' ? 'warning' :
-                     app.system.status === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
+            [color]="app.system.status.toUpperCase() === 'APPLICATION_STATUS.PENDING' ? 'warning' :
+                     app.system.status.toUpperCase() === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
             {{ getLabelForApplicationStatus(app.system.status) }}
           </ion-badge>
         </div>
@@ -105,8 +105,8 @@
               <div class="card-header">
                 <h3 class="card-title">{{ app.profile.applicantSnapshot.name }}</h3>
                 <ion-badge class="status-badge"
-                  [color]="app.system.status === 'APPLICATION_STATUS.PENDING' ? 'warning' :
-                           app.system.status === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
+                  [color]="app.system.status.toUpperCase() === 'APPLICATION_STATUS.PENDING' ? 'warning' :
+                           app.system.status.toUpperCase() === 'APPLICATION_STATUS.ACCEPTED' ? 'success' : 'medium'">
                   {{ getLabelForApplicationStatus(app.system.status) }}
                 </ion-badge>
               </div>

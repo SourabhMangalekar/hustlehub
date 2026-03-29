@@ -22,9 +22,9 @@
         </ion-badge>
         
         <ion-badge class="status-badge"
-          [color]="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING ? 'warning' :
-                   application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED ? 'success' :
-                   application()?.system?.status === APPLICATION_STATUS_CODES.REJECTED ? 'danger' : 'medium'">
+          [color]="application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.PENDING ? 'warning' :
+                   application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.ACCEPTED ? 'success' :
+                   application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.REJECTED ? 'danger' : 'medium'">
           {{ getLabelForApplicationStatus(application()?.system?.status) }}
         </ion-badge>
       </div>
@@ -73,7 +73,7 @@
   <div class="sticky-action-footer" *ngIf="!isLoading() && application()">
     <!-- POST OWNER CONTROLS -->
     <ng-container *ngIf="isPostOwnerView">
-      <div class="action-row" *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING">
+      <div class="action-row" *ngIf="application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.PENDING">
         <ion-button expand="block" shape="round" fill="outline" color="danger" class="half-btn"
                     (click)="setApplicationStatus(APPLICATION_STATUS_CODES.REJECTED)">
           Reject
@@ -85,7 +85,7 @@
       </div>
 
       <ion-button expand="block" shape="round" color="primary" class="main-action-btn"
-                  *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.ACCEPTED" disabled>
+                  *ngIf="application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.ACCEPTED" disabled>
         Accepted ✓
       </ion-button>
     </ng-container>
@@ -93,7 +93,7 @@
     <!-- APPLICANT CONTROLS -->
     <ng-container *ngIf="isApplicantView">
       <ion-button expand="block" shape="round" color="danger" fill="outline" class="main-action-btn"
-                  *ngIf="application()?.system?.status === APPLICATION_STATUS_CODES.PENDING"
+                  *ngIf="application()?.system?.status?.toUpperCase() === APPLICATION_STATUS_CODES.PENDING"
                   (click)="confirmWithdraw()">
         Withdraw Application
       </ion-button>

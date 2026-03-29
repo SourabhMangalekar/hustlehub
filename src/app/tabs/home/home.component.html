@@ -98,7 +98,7 @@
           <div class="requirement-card" *ngFor="let item of myItems()" (click)="goToPost($any(item))">
             <div class="card-header">
               <ion-badge color="tertiary" class="category-badge">{{ getLabelForCity($any(item).profile.city) }}</ion-badge>
-              <ion-badge [color]="$any(item).system?.status === 'POST_STATUS.OPEN' ? 'success' : 'medium'" class="status-badge">
+              <ion-badge [color]="$any(item).system?.status.toUpperCase() === 'POST_STATUS.OPEN' ? 'success' : 'medium'" class="status-badge">
                 {{ getLabelForPostStatus($any(item).system?.status) }}
               </ion-badge>
             </div>
@@ -121,11 +121,11 @@
         <ng-container *ngIf="userRole() === ROLE_CODES.SUPPLY">
           <div class="requirement-card application-card" *ngFor="let item of myItems()" (click)="goToApplicationPost($any(item))">
             <div class="card-header">
-              <ion-badge color="primary" class="category-badge app-status"
-                [class.pending]="$any(item).system?.status === 'APPLICATION_STATUS.PENDING'"
-                [class.accepted]="$any(item).system?.status === 'APPLICATION_STATUS.ACCEPTED'"
-                [class.rejected]="$any(item).system?.status === 'APPLICATION_STATUS.REJECTED'">
-                {{ $any(item).system?.status | titlecase }}
+              <ion-badge class="category-badge app-status"
+                [color]="$any(item).system?.status.toUpperCase() === 'APPLICATION_STATUS.PENDING' ? 'warning' :
+                         $any(item).system?.status.toUpperCase() === 'APPLICATION_STATUS.ACCEPTED' ? 'success' :
+                         $any(item).system?.status.toUpperCase() === 'APPLICATION_STATUS.REJECTED' ? 'danger' : 'medium'">
+                {{ getLabelForApplicationStatus($any(item).system?.status) }}
               </ion-badge>
             </div>
             <h3 class="card-title">{{ $any(item).profile.postTitle }}</h3>

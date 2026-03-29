@@ -7,6 +7,7 @@ import {
   APP_ROUTES,
   getLabelForCity,
   getLabelForPostStatus,
+  getLabelForApplicationStatus,
   getLabelForSubtype
 } from '../../core/master-data';
 
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
   // Expose label helpers to template
   readonly getLabelForCity       = getLabelForCity;
   readonly getLabelForPostStatus = getLabelForPostStatus;
+  readonly getLabelForApplicationStatus = getLabelForApplicationStatus;
   readonly getLabelForSubtype    = getLabelForSubtype;
   readonly ROLE_CODES            = ROLE_CODES;
 

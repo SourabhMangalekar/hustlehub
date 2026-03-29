@@ -108,13 +108,15 @@ export type ApplicationStatus = typeof APPLICATION_STATUS_CODES[keyof typeof APP
 
 /** Maps an application status code → human label */
 export function getLabelForApplicationStatus(code: string | undefined, fallback = '—'): string {
+  if (!code) return fallback;
+  const upperCode = code.toUpperCase();
   const map: Record<string, string> = {
     [APPLICATION_STATUS_CODES.PENDING]: 'Pending',
     [APPLICATION_STATUS_CODES.ACCEPTED]: 'Accepted',
     [APPLICATION_STATUS_CODES.REJECTED]: 'Rejected',
     [APPLICATION_STATUS_CODES.WITHDRAWN]: 'Withdrawn'
   };
-  return code ? (map[code] ?? code) : fallback;
+  return map[upperCode] ?? code;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -154,43 +156,50 @@ export const PAGE_SIZE = 5;
 /** Maps a city code → human label. e.g. 'CITY.MUMBAI' → 'Mumbai' */
 export function getLabelForCity(code: string | undefined, fallback = 'Remote'): string {
   if (!code) return fallback;
-  return CITIES.find(c => c.code === code)?.label ?? code;
+  const upperCode = code.toUpperCase();
+  return CITIES.find(c => c.code.toUpperCase() === upperCode)?.label ?? code;
 }
 
 /** Maps a role code → human label. e.g. 'ROLE.DEMAND' → 'Find Talent' */
 export function getLabelForRole(code: string | undefined, fallback = '—'): string {
   if (!code) return fallback;
+  const upperCode = code.toUpperCase();
   const systemLabels: Record<string, string> = {
     [ROLE_CODES.ADMIN]: 'Admin',
     [ROLE_CODES.UNASSIGNED]: 'Unassigned'
   };
-  return systemLabels[code] ?? ROLES.find(r => r.code === code)?.label ?? code;
+  return systemLabels[upperCode] ?? ROLES.find(r => r.code.toUpperCase() === upperCode)?.label ?? code;
 }
 
 /** Maps a subtype code → human label. e.g. 'ROLE_SUB.INFLUENCER' → '📸 Influencer' */
 export function getLabelForSubtype(code: string | undefined, fallback = '—'): string {
   if (!code) return fallback;
-  return ROLE_SUBTYPES.find(s => s.code === code)?.label ?? code;
+  const upperCode = code.toUpperCase();
+  return ROLE_SUBTYPES.find(s => s.code.toUpperCase() === upperCode)?.label ?? code;
 }
 
 /** Maps a user status code → human label. e.g. 'USER_STATUS.ACTIVE' → 'Active' */
 export function getLabelForUserStatus(code: string | undefined, fallback = '—'): string {
+  if (!code) return fallback;
+  const upperCode = code.toUpperCase();
   const map: Record<string, string> = {
     [USER_STATUS_CODES.ACTIVE]: 'Active',
     [USER_STATUS_CODES.BLOCKED]: 'Blocked',
     [USER_STATUS_CODES.DELETED]: 'Deleted'
   };
-  return code ? (map[code] ?? code) : fallback;
+  return map[upperCode] ?? code;
 }
 
 /** Maps a post status code → human label. e.g. 'POST_STATUS.OPEN' → 'Open' */
 export function getLabelForPostStatus(code: string | undefined, fallback = '—'): string {
+  if (!code) return fallback;
+  const upperCode = code.toUpperCase();
   const map: Record<string, string> = {
     [POST_STATUS_CODES.OPEN]: 'Open',
     [POST_STATUS_CODES.CLOSED]: 'Closed',
     [POST_STATUS_CODES.IN_PROGRESS]: 'In Progress',
     [POST_STATUS_CODES.COMPLETED]: 'Completed'
   };
-  return code ? (map[code] ?? code) : fallback;
+  return map[upperCode] ?? code;
 }
 
